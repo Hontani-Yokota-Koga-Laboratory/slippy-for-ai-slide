@@ -1,0 +1,456 @@
+[
+  {
+    "id": "slide-title",
+    "layout": "title",
+    "props": {
+      "tag": "コンポーネントショーケース",
+      "heading": "Web Components for React",
+      "author": "鐘ヶ江 航",
+      "date": "auto"
+    }
+  },
+  {
+    "id": "slide-toc",
+    "layout": "toc",
+    "props": {
+      "heading": "目次"
+    }
+  },
+  {
+    "id": "slide-s1",
+    "layout": "section",
+    "props": {
+      "title": "見出しコンポーネント"
+    }
+  },
+  {
+    "id": "slide-s1-1",
+    "layout": "subsection",
+    "props": {
+      "title": "section / subsection"
+    }
+  },
+  {
+    "id": "slide-heading-desc",
+    "layout": "content",
+    "props": {
+      "heading": "slide-section / slide-subsection"
+    },
+    "children": [
+      {
+        "id": "c-heading-ul",
+        "type": "ul",
+        "items": [
+          "<code>section</code> — LaTeX の <code>\\section</code> 相当。濃いグラデ背景",
+          "<code>subsection</code> — <code>\\subsection</code> 相当。明るいグラデ背景",
+          "<code>subsubsection</code> — <code>\\subsubsection</code> 相当。白背景 + アクセント文字",
+          "すべて <strong>自動採番</strong>（1, 1.1, 1.1.1, …）され <code>toc</code> に反映"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "slide-s1-1-1",
+    "layout": "subsubsection",
+    "props": {
+      "title": "subsubsection"
+    }
+  },
+  {
+    "id": "slide-subsubsection-desc",
+    "layout": "content",
+    "props": {
+      "heading": "subsubsection のサンプル"
+    },
+    "children": [
+      {
+        "id": "c-sub3-text",
+        "type": "text",
+        "children": "前のスライドが <code>subsubsection</code>（1.1.1）。\n白背景でアクセントカラーの大見出し。"
+      }
+    ]
+  },
+  {
+    "id": "slide-s1-2",
+    "layout": "subsection",
+    "props": {
+      "title": "目次の自動生成"
+    }
+  },
+  {
+    "id": "slide-toc-desc",
+    "layout": "content",
+    "props": {
+      "heading": "toc（目次）"
+    },
+    "children": [
+      {
+        "id": "c-toc-text",
+        "type": "text",
+        "children": "<code>layout: \"toc\"</code> を置くだけで、全セクションを自動列挙します。"
+      },
+      {
+        "id": "c-toc-box",
+        "type": "box",
+        "props": {
+          "variant": "green",
+          "label": "仕組み"
+        },
+        "children": "各セクションスライドをスキャンして採番し、TOCエントリを生成。スライドデータが変わると自動で更新されます。"
+      }
+    ]
+  },
+  {
+    "id": "slide-s2",
+    "layout": "section",
+    "props": {
+      "title": "ボックスとレイアウト"
+    }
+  },
+  {
+    "id": "slide-s2-1",
+    "layout": "subsection",
+    "props": {
+      "title": "slide-box"
+    }
+  },
+  {
+    "id": "slide-box-demo",
+    "layout": "content",
+    "props": {
+      "heading": "box — type 一覧"
+    },
+    "children": [
+      {
+        "id": "c-box-cols",
+        "type": "cols",
+        "props": {
+          "left": 1,
+          "right": 1
+        },
+        "columns": [
+          [
+            {
+              "id": "c-box-blue",
+              "type": "box",
+              "props": {
+                "variant": "blue",
+                "label": "定義"
+              },
+              "children": "$f : \\mathcal{X} \\to \\mathcal{Y}$ を予測関数とする。"
+            },
+            {
+              "id": "c-box-violet",
+              "type": "box",
+              "props": {
+                "variant": "violet",
+                "label": "定理"
+              },
+              "children": "$\\mathbb{P}(Y_{n+1} \\in \\mathcal{C}(X_{n+1})) \\ge 1 - \\alpha$"
+            },
+            {
+              "id": "c-box-cyan",
+              "type": "box",
+              "props": {
+                "variant": "cyan",
+                "label": "補題"
+              },
+              "children": "補題の内容をここに書く。"
+            }
+          ],
+          [
+            {
+              "id": "c-box-green",
+              "type": "box",
+              "props": {
+                "variant": "green",
+                "label": "ポイント"
+              },
+              "children": "注意事項・補足をここに書く。"
+            },
+            {
+              "id": "c-box-amber",
+              "type": "box",
+              "props": {
+                "variant": "amber",
+                "label": "例"
+              },
+              "children": "回帰：$s(x, y) = |y - \\hat{\\mu}(x)|$"
+            },
+            {
+              "id": "c-box-red",
+              "type": "box",
+              "props": {
+                "variant": "red",
+                "label": "注意"
+              },
+              "children": "重要な警告・エラーケース。"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "slide-s2-2",
+    "layout": "subsection",
+    "props": {
+      "title": "slide-cols"
+    }
+  },
+  {
+    "id": "slide-cols-demo",
+    "layout": "content",
+    "props": {
+      "heading": "cols — ratio 指定"
+    },
+    "children": [
+      {
+        "id": "c-cols-text",
+        "type": "text",
+        "children": "<code>ratio</code> で列幅を指定。対応値：<code>1-1</code>（デフォルト）、<code>1-2</code>、<code>2-1</code>、<code>1-3</code>、<code>3-1</code>"
+      },
+      {
+        "id": "c-cols-main",
+        "type": "cols",
+        "props": {
+          "left": 1,
+          "right": 2
+        },
+        "columns": [
+          [
+            {
+              "id": "c-cols-left-h3",
+              "type": "h3",
+              "children": "左カラム（1fr）"
+            },
+            {
+              "id": "c-cols-left-ul",
+              "type": "ul",
+              "items": [
+                "アルゴリズムの手順",
+                "箇条書き説明"
+              ]
+            }
+          ],
+          [
+            {
+              "id": "c-cols-right-box",
+              "type": "box",
+              "props": {
+                "variant": "violet",
+                "label": "定理 — Marginal Coverage"
+              },
+              "children": "データが交換可能ならば $$\\mathbb{P}\\!\\bigl(Y_{n+1} \\in \\mathcal{C}(X_{n+1})\\bigr) \\ge 1 - \\alpha$$"
+            }
+          ]
+        ]
+      },
+      {
+        "type": "box",
+        "id": "c-mokwqhhw-p1ch",
+        "props": {
+          "variant": "cyan",
+          "label": "新しいボックス"
+        },
+        "children": "$$\nA=\n\\begin{bmatrix}\n   a & b \\\\\n   c & d\n\\end{bmatrix}\n$$"
+      }
+    ]
+  },
+  {
+    "id": "slide-s3",
+    "layout": "section",
+    "props": {
+      "title": "図・表・特殊レイアウト"
+    }
+  },
+  {
+    "id": "slide-s3-1",
+    "layout": "subsection",
+    "props": {
+      "title": "figure と D3"
+    }
+  },
+  {
+    "id": "slide-figure-demo",
+    "layout": "content",
+    "props": {
+      "heading": "figure + D3.js"
+    },
+    "children": [
+      {
+        "type": "vcenter",
+        "id": "c-mokqk6f7-3qv5",
+        "children": [
+          {
+            "id": "c-fig-cols",
+            "type": "cols",
+            "props": {
+              "left": 3,
+              "right": 2
+            },
+            "columns": [
+              [
+                {
+                  "id": "c-fig-desc",
+                  "type": "text",
+                  "children": "<code>figure</code> コンポーネントは <code>chartId</code> で登録済みのD3チャートを描画します。KaTeXも使えます。\n"
+                },
+                {
+                  "id": "c-fig-box",
+                  "type": "box",
+                  "props": {
+                    "variant": "blue",
+                    "label": "使い方"
+                  },
+                  "children": "src/charts/ にReactコンポーネントを作成し、registry.ts に登録するだけ。"
+                }
+              ],
+              [
+                {
+                  "id": "c-fig-figure",
+                  "type": "figure",
+                  "props": {
+                    "caption": "図1：正規分布の確率密度関数",
+                    "chartId": "NormalCurve"
+                  }
+                }
+              ]
+            ]
+          }
+        ]
+      }
+    ],
+    "overlays": [
+      {
+        "type": "abs-textbox",
+        "id": "c-mokrosgq-l2sa",
+        "props": {
+          "x": 854.5313430059524,
+          "y": 146,
+          "content": "テキストを自由に追加できる！\n$f(x)=x^2$\n",
+          "borderColor": "blue",
+          "fitToInner": true
+        }
+      }
+    ]
+  },
+  {
+    "id": "slide-s3-2",
+    "layout": "subsection",
+    "props": {
+      "title": "テーブルと divider"
+    }
+  },
+  {
+    "id": "slide-table-demo",
+    "layout": "content",
+    "props": {
+      "heading": "table クラス / divider"
+    },
+    "children": [
+      {
+        "type": "text",
+        "id": "c-mokqyv16-hst8",
+        "children": "Devider（区切り線）でテキストを区切る"
+      },
+      {
+        "id": "c-divider",
+        "type": "divider"
+      },
+      {
+        "type": "text",
+        "id": "c-mokqzaee-h9oe",
+        "children": "こんな感じに"
+      },
+      {
+        "id": "c-table",
+        "type": "table",
+        "props": {
+          "headers": [
+            "手法",
+            "分布仮定",
+            "Coverage 保証",
+            "計算コスト"
+          ],
+          "rows": [
+            [
+              "Conformal Prediction",
+              "不要",
+              "有限標本で成立",
+              "低"
+            ],
+            [
+              "Bootstrap",
+              "不要",
+              "漸近的",
+              "中"
+            ],
+            [
+              "Bayesian Credible Interval",
+              "必要",
+              "主観的",
+              "高"
+            ]
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "slide-s3-3",
+    "layout": "subsection",
+    "props": {
+      "title": "statement レイアウト"
+    }
+  },
+  {
+    "id": "slide-statement-demo",
+    "layout": "statement",
+    "props": {
+      "children": "不確かさを正直に伝えることが\n信頼できるAIの第一歩"
+    }
+  },
+  {
+    "id": "slide-vcenter-demo",
+    "layout": "content",
+    "props": {
+      "heading": "vcenter — 縦方向中央配置"
+    },
+    "children": [
+      {
+        "id": "c-vcenter-demo",
+        "type": "vcenter",
+        "children": [
+          {
+            "id": "c-vcenter-box",
+            "type": "box",
+            "props": {
+              "variant": "violet",
+              "label": "vertically centered"
+            },
+            "children": "このボックスはスライドの残り領域の中央に配置されます。"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "slide-summary",
+    "layout": "content",
+    "props": {
+      "heading": "まとめ"
+    },
+    "children": [
+      {
+        "id": "c-summary-box",
+        "type": "box",
+        "props": {
+          "variant": "green",
+          "label": "このリポジトリの使い方"
+        },
+        "children": "slides.json にスライドデータを定義 → GUIで props を編集 → 保存 → PDF出力"
+      }
+    ]
+  }
+]
