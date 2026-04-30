@@ -51,3 +51,5 @@ export function NormalCurve({ width: W = 520, height: H = 240 }: Props) {
 
   return <svg ref={svgRef} />
 }
+
+export default NormalCurve

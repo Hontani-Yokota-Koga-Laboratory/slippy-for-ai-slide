@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
+import { ProjectContext } from './context/ProjectContext'
 import type { Slide, TocEntry, SlideComponent, MoveTarget, AbsTextBox, OverlayComponent } from './types'
 import type { SectionInfo } from './utils/sections'
 import { computeSectionNumbers, computeTocEntries } from './utils/sections'
@@ -493,6 +494,7 @@ export default function App() {
   ]
 
   return (
+    <ProjectContext.Provider value={project}>
     <div className="h-screen flex flex-col bg-gray-900 text-white">
       {/* Header */}
       <header className="flex items-center gap-2 px-3 md:px-4 py-2 bg-gray-800 border-b border-gray-700 shrink-0">
@@ -599,5 +601,6 @@ export default function App() {
         </div>
       </div>
     </div>
+    </ProjectContext.Provider>
   )
 }

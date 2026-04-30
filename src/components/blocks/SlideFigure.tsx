@@ -1,5 +1,7 @@
 import type { FigureComponent } from '../../types'
 import { chartRegistry } from '../../charts/registry'
+import { localChartRegistry } from '../../charts/localRegistry'
+import { useProject } from '../../context/ProjectContext'
 
 interface Props {
   block: FigureComponent
@@ -8,7 +10,8 @@ interface Props {
 }
 
 export function SlideFigure({ block, selected, onClick }: Props) {
-  const Chart = chartRegistry[block.props.chartId]
+  const project = useProject()
+  const Chart = localChartRegistry[project]?.[block.props.chartId] ?? chartRegistry[block.props.chartId]
   const { width, height, caption } = block.props
 
   return (

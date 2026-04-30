@@ -3,6 +3,7 @@ import type { Slide, TocEntry } from '../types'
 import { SlideRenderer } from '../components/SlideRenderer'
 import { computeSectionNumbers, computeTocEntries } from '../utils/sections'
 import type { SectionInfo } from '../utils/sections'
+import { ProjectContext } from '../context/ProjectContext'
 
 interface Props {
   project: string
@@ -28,17 +29,19 @@ export function PrintView({ project }: Props) {
   if (!ready) return <div id="print-loading">Loading...</div>
 
   return (
-    <div id="print-ready">
-      {slides.map((slide, i) => (
-        <div key={slide.id} className="print-slide-wrapper">
-          <SlideRenderer
-            slide={slide}
-            pageNum={i + 1}
-            sectionNumbers={sectionNumbers}
-            tocEntries={tocEntries}
-          />
-        </div>
-      ))}
-    </div>
+    <ProjectContext.Provider value={project}>
+      <div id="print-ready">
+        {slides.map((slide, i) => (
+          <div key={slide.id} className="print-slide-wrapper">
+            <SlideRenderer
+              slide={slide}
+              pageNum={i + 1}
+              sectionNumbers={sectionNumbers}
+              tocEntries={tocEntries}
+            />
+          </div>
+        ))}
+      </div>
+    </ProjectContext.Provider>
   )
 }
