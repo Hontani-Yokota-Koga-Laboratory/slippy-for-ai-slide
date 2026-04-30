@@ -5,6 +5,43 @@ import type { IncomingMessage, ServerResponse } from 'node:http'
 
 const ROOT = resolve(import.meta.dirname, '..')
 
+async function updateProjectIndex(project: string) {
+  const filePath = join(ROOT, 'projects', project, 'slides.json')
+  const indexPath = join(ROOT, 'projects', project, '_index.json')
+
+  try {
+    const content = await readFile(filePath, 'utf-8')
+    const lines = content.split('\n')
+    const index = []
+
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i]
+      // Find "id": "..." with 4 spaces indentation (top-level slide property)
+      const idMatch = line.match(/^ {4}"id":\s*"([^"]+)"/)
+      if (idMatch) {
+        const id = idMatch[1]
+        let title = ''
+        // Look ahead for heading or title within the same slide object
+        for (let j = 1; j < 15 && (i + j) < lines.length; j++) {
+          const nextLine = lines[i + j]
+          // If we hit the next slide or end of components, stop looking
+          if (nextLine.match(/^ {2}\},?/) || nextLine.match(/^ {4}"id":/)) break
+
+          const titleMatch = nextLine.match(/"(heading|title)":\s*"([^"]+)"/)
+          if (titleMatch) {
+            title = titleMatch[2]
+            break
+          }
+        }
+        index.push({ id, line: i + 1, title })
+      }
+    }
+    await writeFile(indexPath, JSON.stringify(index, null, 2), 'utf-8')
+  } catch (err) {
+    console.error(`Failed to update index for ${project}:`, err)
+  }
+}
+
 async function handleRequest(req: IncomingMessage, res: ServerResponse, server: ViteDevServer) {
   const url = new URL(req.url ?? '/', 'http://localhost')
   const path = url.pathname.slice(5) // strip /api/
@@ -18,6 +55,29 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse, server: 
       const entries = await readdir(join(ROOT, 'projects'), { withFileTypes: true })
       const names = entries.filter(e => e.isDirectory()).map(e => e.name)
       return res.end(JSON.stringify(names))
+    }
+
+    // GET /api/projects/:name/config → read project.json
+    const configMatch = path.match(/^projects\/([^/]+)\/config$/)
+    if (configMatch) {
+      const project = configMatch[1]
+      const filePath = join(ROOT, 'projects', project, 'project.json')
+
+      if (req.method === 'GET') {
+        try {
+          const content = await readFile(filePath, 'utf-8')
+          return res.end(content)
+        } catch {
+          // If config doesn't exist, return empty object
+          return res.end(JSON.stringify({}))
+        }
+      }
+
+      if (req.method === 'PUT') {
+        const body = await readBody(req)
+        await writeFile(filePath, body, 'utf-8')
+        return res.end(JSON.stringify({ ok: true }))
+      }
     }
 
     // GET /api/projects/:name/slides → read slides.json
@@ -35,8 +95,32 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse, server: 
       if (req.method === 'PUT') {
         const body = await readBody(req)
         await writeFile(filePath, body, 'utf-8')
+        await updateProjectIndex(project)
         return res.end(JSON.stringify({ ok: true }))
       }
+    }
+
+    // GET /api/projects/:name/index → read _index.json
+    const indexMatch = path.match(/^projects\/([^/]+)\/index$/)
+    if (indexMatch && req.method === 'GET') {
+      const project = indexMatch[1]
+      const indexPath = join(ROOT, 'projects', project, '_index.json')
+      try {
+        const content = await readFile(indexPath, 'utf-8')
+        return res.end(content)
+      } catch {
+        // If index doesn't exist, try to generate it
+        await updateProjectIndex(project)
+        const content = await readFile(indexPath, 'utf-8')
+        return res.end(content)
+      }
+    }
+
+    // POST /api/projects/:name/index → force regenerate _index.json
+    if (indexMatch && req.method === 'POST') {
+      const project = indexMatch[1]
+      await updateProjectIndex(project)
+      return res.end(JSON.stringify({ ok: true }))
     }
 
     // POST /api/projects/:name/pdf → generate PDF with Puppeteer
@@ -104,6 +188,20 @@ export function slideServerPlugin(): Plugin {
     name: 'slide-server',
     configureServer(server) {
       devServer = server
+
+      // Watch for changes in projects/**/slides.json to update index automatically
+      server.watcher.add(join(ROOT, 'projects/**/slides.json'))
+      server.watcher.on('change', (path) => {
+        if (path.endsWith('slides.json')) {
+          const match = path.match(/projects\/([^/]+)\/slides\.json$/)
+          if (match) {
+            const project = match[1]
+            console.log(`[slide-server] Change detected in ${project}, updating index...`)
+            updateProjectIndex(project).catch(console.error)
+          }
+        }
+      })
+
       server.middlewares.use((req, res, next) => {
         if (!req.url?.startsWith('/api/')) return next()
         handleRequest(req, res, devServer).catch(err => {

@@ -155,14 +155,17 @@ function getUrlParams() {
     project: p.get('project') ?? 'example',
     slide:   p.get('slide') ?? null,
     print:   p.get('print') === '1',
+    theme:   p.get('theme') ?? null,
   }
 }
 
-function pushUrlState(project: string, slideId: string | null) {
+function pushUrlState(project: string, slideId: string | null, theme: string) {
   const p = new URLSearchParams(location.search)
   p.set('project', project)
   if (slideId) p.set('slide', slideId)
   else p.delete('slide')
+  if (theme !== 'light') p.set('theme', theme)
+  else p.delete('theme')
   history.replaceState(null, '', `?${p.toString()}`)
 }
 
@@ -170,10 +173,18 @@ function pushUrlState(project: string, slideId: string | null) {
 
 type MobileTab = 'slides' | 'tree' | 'props'
 
+const THEMES = [
+  { id: 'light',    label: 'Light',    icon: '☀️' },
+  { id: 'dark',     label: 'Dark',     icon: '🌙' },
+  { id: 'academic', label: 'Academic', icon: '🏛️' },
+  { id: 'pop',      label: 'Pop',      icon: '🎀' },
+]
+
 export default function App() {
-  const { project: initialProject, slide: initialSlide, print: isPrint } = getUrlParams()
+  const { project: initialProject, slide: initialSlide, print: isPrint, theme: initialTheme } = getUrlParams()
 
   const [project, setProject] = useState(initialProject)
+  const [theme, setTheme] = useState(initialTheme ?? 'light')
   const [projects, setProjects] = useState<string[]>([])
   const [slides, setSlides] = useState<Slide[]>([])
   const [sectionNumbers, setSectionNumbers] = useState<Map<string, SectionInfo>>(new Map())
@@ -209,6 +220,16 @@ export default function App() {
   }, [])
 
   useEffect(() => {
+    fetch(`/api/projects/${project}/config`)
+      .then(r => r.json())
+      .then(data => {
+        if (data.theme && !initialTheme) {
+          setTheme(data.theme)
+        }
+      })
+  }, [project]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
     fetch(`/api/projects/${project}/slides`)
       .then(r => r.json())
       .then((data: Slide[]) => {
@@ -232,10 +253,10 @@ export default function App() {
     setTocEntries(computeTocEntries(slides))
   }, [slides])
 
-  // Persist selected slide in URL
+  // Persist selected slide and theme in URL
   useEffect(() => {
-    pushUrlState(project, selectedSlideId)
-  }, [project, selectedSlideId])
+    pushUrlState(project, selectedSlideId, theme)
+  }, [project, selectedSlideId, theme])
 
   const selectedSlideIndex = slides.findIndex(s => s.id === selectedSlideId)
   const selectedSlide = selectedSlideIndex >= 0 ? slides[selectedSlideIndex] : null
@@ -401,12 +422,19 @@ export default function App() {
   const save = async () => {
     setSaving(true)
     try {
-      const res = await fetch(`/api/projects/${project}/slides`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(slides, null, 2),
-      })
-      if (res.ok) {
+      const [resSlides, resConfig] = await Promise.all([
+        fetch(`/api/projects/${project}/slides`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(slides, null, 2),
+        }),
+        fetch(`/api/projects/${project}/config`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ theme }, null, 2),
+        })
+      ])
+      if (resSlides.ok && resConfig.ok) {
         savedSlidesRef.current = JSON.stringify(slides)
         setSaveStatus('saved')
       } else {
@@ -439,7 +467,7 @@ export default function App() {
   }
 
   if (isPrint) {
-    return <PrintView project={initialProject} />
+    return <PrintView project={initialProject} theme={initialTheme} />
   }
 
   const slideListPanel = (
@@ -495,7 +523,7 @@ export default function App() {
 
   return (
     <ProjectContext.Provider value={project}>
-    <div className="h-screen flex flex-col bg-gray-900 text-white">
+    <div className={`h-screen flex flex-col bg-gray-900 text-white theme-${theme}`}>
       {/* Header */}
       <header className="flex items-center gap-2 px-3 md:px-4 py-2 bg-gray-800 border-b border-gray-700 shrink-0">
         <span className="font-bold text-sm text-gray-200">AI Slide</span>
@@ -518,6 +546,19 @@ export default function App() {
         <div className="flex-1" />
         {saveStatus === 'saved' && <span className="text-xs text-green-400 hidden sm:inline">保存しました</span>}
         {saveStatus === 'error' && <span className="text-xs text-red-400 hidden sm:inline">保存に失敗しました</span>}
+        
+        <select
+          value={theme}
+          onChange={e => setTheme(e.target.value)}
+          className="bg-gray-700 text-white text-sm px-2 py-1 rounded border border-gray-600 transition-colors"
+        >
+          {THEMES.map(t => (
+            <option key={t.id} value={t.id}>
+              {t.icon} {t.label}
+            </option>
+          ))}
+        </select>
+
         <button
           onClick={save}
           disabled={saving}

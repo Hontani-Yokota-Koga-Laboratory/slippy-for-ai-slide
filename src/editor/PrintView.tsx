@@ -7,9 +7,10 @@ import { ProjectContext } from '../context/ProjectContext'
 
 interface Props {
   project: string
+  theme?: string
 }
 
-export function PrintView({ project }: Props) {
+export function PrintView({ project, theme }: Props) {
   const [slides, setSlides] = useState<Slide[]>([])
   const [sectionNumbers, setSectionNumbers] = useState<Map<string, SectionInfo>>(new Map())
   const [tocEntries, setTocEntries] = useState<TocEntry[]>([])
@@ -30,7 +31,7 @@ export function PrintView({ project }: Props) {
 
   return (
     <ProjectContext.Provider value={project}>
-      <div id="print-ready">
+      <div id="print-ready" className={`theme-${theme}`}>
         {slides.map((slide, i) => (
           <div key={slide.id} className="print-slide-wrapper">
             <SlideRenderer

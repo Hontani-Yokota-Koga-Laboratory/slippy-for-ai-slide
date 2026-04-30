@@ -1,0 +1,123 @@
+.theme-pop .slide-canvas {
+  /* ── Pop & Cute Palette (Pastels) ── */
+  --slide-bg:         #fffcf2; /* Warm cream */
+  --slide-fg:         #4a3a3a; /* Soft chocolate */
+  --slide-muted:      #9c8b8b;
+  --slide-blue:       #ff8fb1; /* Pastel Pink */
+  --slide-violet:     #b19ff9; /* Pastel Purple */
+  --slide-border:     #ffd1d1;
+  --slide-code-bg:    #fff0f5;
+  --slide-code-fg:    #d81b60;
+  --slide-tag-bg:     #ffe4e1;
+  --slide-tag-border: #ffb6c1;
+  --slide-box-sep:    rgba(255,255,255,0.4);
+
+  --box-blue-border:    #ffb6c1;
+  --box-blue-lbl-bg:    #ffc0cb;
+  --box-blue-lbl-fg:    #ffffff;
+  --box-blue-body-bg:   #fff5f7;
+  --box-violet-border:  #d1c4e9;
+  --box-violet-lbl-bg:  #e1bee7;
+  --box-violet-lbl-fg:  #ffffff;
+  --box-violet-body-bg: #f9f4ff;
+  --box-cyan-border:    #b2ebf2;
+  --box-cyan-lbl-bg:    #80deea;
+  --box-cyan-lbl-fg:    #ffffff;
+  --box-cyan-body-bg:   #f0feff;
+  --box-green-border:   #c8e6c9;
+  --box-green-lbl-bg:   #a5d6a7;
+  --box-green-lbl-fg:   #ffffff;
+  --box-green-body-bg:  #f4fff5;
+  --box-amber-border:   #ffecb3;
+  --box-amber-lbl-bg:   #ffe082;
+  --box-amber-lbl-fg:   #ffffff;
+  --box-amber-body-bg:  #fffdf5;
+  --box-red-border:     #ffcdd2;
+  --box-red-lbl-bg:     #ef9a9a;
+  --box-red-lbl-fg:     #ffffff;
+  --box-red-body-bg:    #fff8f8;
+
+  --tbl-border:       #ffb6c1;
+  --tbl-head-bg:      #ffb6c1;
+  --tbl-head-fg:      #ffffff;
+  --tbl-odd-bg:       #ffffff;
+  --tbl-even-bg:      #fff5f7;
+  --tbl-cell-border:  #ffe4e1;
+
+  /* Font: Kiwi Maru for that cute handwritten feel */
+  font-family: 'Kiwi Maru', 'M PLUS Rounded 1c', 'HG創英角ﾎﾟｯﾌﾟ体', sans-serif;
+}
+
+/* ── Bubbly & Rounded Shapes ── */
+.theme-pop .slide-box {
+  border-radius: 24px;
+  border-width: 2px;
+  box-shadow: 0 4px 0 rgba(0,0,0,0.05);
+}
+
+.theme-pop .slide-box-label {
+  border-radius: 22px 22px 0 0;
+  text-align: center;
+  font-weight: 700;
+}
+
+.theme-pop .slide-table {
+  border-radius: 16px;
+}
+
+.theme-pop code {
+  border-radius: 8px;
+}
+
+.theme-pop .sc-title-tag {
+  border-radius: 20px;
+  border-width: 2px;
+  padding: 4px 16px;
+}
+
+/* ── Section slides with Polka Dots ── */
+.theme-pop .slide-canvas.sc-section {
+  background-color: #ff8fb1;
+  background-image: radial-gradient(#ffb6c1 20%, transparent 20%),
+                    radial-gradient(#ffb6c1 20%, transparent 20%);
+  background-size: 40px 40px;
+  background-position: 0 0, 20px 20px;
+}
+
+.theme-pop .slide-canvas.sc-subsection {
+  background-color: #b19ff9;
+  background-image: radial-gradient(#c5b7ff 20%, transparent 20%),
+                    radial-gradient(#c5b7ff 20%, transparent 20%);
+  background-size: 30px 30px;
+  background-position: 0 0, 15px 15px;
+}
+
+.theme-pop .sc-section-title,
+.theme-pop .sc-subsection-title {
+  text-shadow: 2px 2px 0 rgba(0,0,0,0.1);
+  background: white;
+  color: #ff8fb1;
+  padding: 10px 30px;
+  border-radius: 50px;
+  display: inline-block;
+}
+
+.theme-pop .sc-subsection-title {
+  color: #b19ff9;
+}
+
+.theme-pop .slide-canvas h2 {
+  color: #ff8fb1;
+  border-bottom: 4px dotted #ffb6c1;
+}
+
+.theme-pop .slide-canvas h3::before {
+  content: '★';
+  margin-right: 8px;
+  color: #ffd700;
+}
+
+/* Add some floaty shadows to images/figures */
+.theme-pop .slide-figure {
+  filter: drop-shadow(0 6px 12px rgba(255, 182, 193, 0.3));
+}

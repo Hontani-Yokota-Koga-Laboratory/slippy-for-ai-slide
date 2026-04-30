@@ -1,0 +1,85 @@
+.theme-academic .slide-canvas {
+  /* ── Academic palette (High contrast, professional) ── */
+  --slide-bg:         #ffffff;
+  --slide-fg:         #000000;
+  --slide-muted:      #555555;
+  --slide-blue:       #004a99;
+  --slide-violet:     #5d2a9d;
+  --slide-border:     #333333;
+  --slide-code-bg:    #f0f0f0;
+  --slide-code-fg:    #000000;
+  --slide-tag-bg:     #ffffff;
+  --slide-tag-border: #004a99;
+  --slide-box-sep:    rgba(0,0,0,0.15);
+
+  --box-blue-border:    #004a99;
+  --box-blue-lbl-bg:    #004a99;
+  --box-blue-lbl-fg:    #ffffff;
+  --box-blue-body-bg:   #f2f7ff;
+  --box-violet-border:  #5d2a9d;
+  --box-violet-lbl-bg:  #5d2a9d;
+  --box-violet-lbl-fg:  #ffffff;
+  --box-violet-body-bg: #f8f2ff;
+  --box-cyan-border:    #007fa3;
+  --box-cyan-lbl-bg:    #007fa3;
+  --box-cyan-lbl-fg:    #ffffff;
+  --box-cyan-body-bg:   #f0fbff;
+  --box-green-border:   #007d32;
+  --box-green-lbl-bg:   #007d32;
+  --box-green-lbl-fg:   #ffffff;
+  --box-green-body-bg:  #f0fff4;
+  --box-amber-border:   #d48100;
+  --box-amber-lbl-bg:   #d48100;
+  --box-amber-lbl-fg:   #ffffff;
+  --box-amber-body-bg:  #fffcf0;
+  --box-red-border:     #c8102e;
+  --box-red-lbl-bg:     #c8102e;
+  --box-red-lbl-fg:     #ffffff;
+  --box-red-body-bg:    #fff5f5;
+
+  --tbl-border:       #000000;
+  --tbl-head-bg:      #333333;
+  --tbl-head-fg:      #ffffff;
+  --tbl-odd-bg:       #ffffff;
+  --tbl-even-bg:      #f9f9f9;
+  --tbl-cell-border:  #cccccc;
+
+  /* Font Override */
+  font-family: 'Meiryo', 'Hiragino Kaku Gothic ProN', 'MS PGothic', sans-serif;
+}
+
+/* ── Remove rounding for academic precision ── */
+.theme-academic .slide-box,
+.theme-academic .slide-box-label,
+.theme-academic .slide-table,
+.theme-academic code,
+.theme-academic .sc-title-tag {
+  border-radius: 0 !important;
+}
+
+.theme-academic .slide-canvas.sc-section {
+  background: #002b55; /* Solid or very subtle gradient for professional look */
+}
+
+.theme-academic .slide-canvas.sc-subsection {
+  background: #004a99;
+}
+
+.theme-academic .sc-section-title,
+.theme-academic .sc-subsection-title {
+  color: #ffffff;
+}
+
+.theme-academic .sc-section-num,
+.theme-academic .sc-subsection-num {
+  color: rgba(255,255,255,0.7);
+}
+
+.theme-academic .slide-canvas h2 {
+  border-bottom: 2px solid #004a99;
+  color: #004a99;
+}
+
+.theme-academic .toc-num {
+  color: #004a99;
+}

@@ -1,0 +1,92 @@
+.theme-light .slide-canvas {
+  --slide-bg:         #ffffff;
+  --slide-fg:         #1e293b;
+  --slide-muted:      #64748b;
+  --slide-blue:       #1d4ed8;
+  --slide-violet:     #6d28d9;
+  --slide-border:     #cbd5e1;
+  --slide-code-bg:    #f1f5f9;
+  --slide-code-fg:    #0f172a;
+  --slide-tag-bg:     #eff6ff;
+  --slide-tag-border: #bfdbfe;
+  --slide-box-sep:    rgba(0,0,0,0.1);
+
+  --box-blue-border:    #93c5fd;
+  --box-blue-lbl-bg:    #dbeafe;
+  --box-blue-lbl-fg:    #1e3a8a;
+  --box-blue-body-bg:   #eff6ff;
+  --box-violet-border:  #c4b5fd;
+  --box-violet-lbl-bg:  #ede9fe;
+  --box-violet-lbl-fg:  #4c1d95;
+  --box-violet-body-bg: #f5f3ff;
+  --box-cyan-border:    #67e8f9;
+  --box-cyan-lbl-bg:    #cffafe;
+  --box-cyan-lbl-fg:    #164e63;
+  --box-cyan-body-bg:   #ecfeff;
+  --box-green-border:   #86efac;
+  --box-green-lbl-bg:   #dcfce7;
+  --box-green-lbl-fg:   #14532d;
+  --box-green-body-bg:  #f0fdf4;
+  --box-amber-border:   #fcd34d;
+  --box-amber-lbl-bg:   #fef3c7;
+  --box-amber-lbl-fg:   #78350f;
+  --box-amber-body-bg:  #fffbeb;
+  --box-red-border:     #fca5a5;
+  --box-red-lbl-bg:     #fee2e2;
+  --box-red-lbl-fg:     #7f1d1d;
+  --box-red-body-bg:    #fef2f2;
+
+  --tbl-border:       #bfdbfe;
+  --tbl-head-bg:      #1d4ed8;
+  --tbl-head-fg:      #ffffff;
+  --tbl-odd-bg:       #ffffff;
+  --tbl-even-bg:      #eff6ff;
+  --tbl-cell-border:  #dbeafe;
+}
+
+/* Default variables if no theme is applied */
+.slide-canvas {
+  --slide-bg:         #ffffff;
+  --slide-fg:         #1e293b;
+  --slide-muted:      #64748b;
+  --slide-blue:       #1d4ed8;
+  --slide-violet:     #6d28d9;
+  --slide-border:     #cbd5e1;
+  --slide-code-bg:    #f1f5f9;
+  --slide-code-fg:    #0f172a;
+  --slide-tag-bg:     #eff6ff;
+  --slide-tag-border: #bfdbfe;
+  --slide-box-sep:    rgba(0,0,0,0.1);
+
+  --box-blue-border:    #93c5fd;
+  --box-blue-lbl-bg:    #dbeafe;
+  --box-blue-lbl-fg:    #1e3a8a;
+  --box-blue-body-bg:   #eff6ff;
+  --box-violet-border:  #c4b5fd;
+  --box-violet-lbl-bg:  #ede9fe;
+  --box-violet-lbl-fg:  #4c1d95;
+  --box-violet-body-bg: #f5f3ff;
+  --box-cyan-border:    #67e8f9;
+  --box-cyan-lbl-bg:    #cffafe;
+  --box-cyan-lbl-fg:    #164e63;
+  --box-cyan-body-bg:   #ecfeff;
+  --box-green-border:   #86efac;
+  --box-green-lbl-bg:   #dcfce7;
+  --box-green-lbl-fg:   #14532d;
+  --box-green-body-bg:  #f0fdf4;
+  --box-amber-border:   #fcd34d;
+  --box-amber-lbl-bg:   #fef3c7;
+  --box-amber-lbl-fg:   #78350f;
+  --box-amber-body-bg:  #fffbeb;
+  --box-red-border:     #fca5a5;
+  --box-red-lbl-bg:     #fee2e2;
+  --box-red-lbl-fg:     #7f1d1d;
+  --box-red-body-bg:    #fef2f2;
+
+  --tbl-border:       #bfdbfe;
+  --tbl-head-bg:      #1d4ed8;
+  --tbl-head-fg:      #ffffff;
+  --tbl-odd-bg:       #ffffff;
+  --tbl-even-bg:      #eff6ff;
+  --tbl-cell-border:  #dbeafe;
+}

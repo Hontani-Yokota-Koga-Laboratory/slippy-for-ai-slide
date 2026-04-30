@@ -1,0 +1,117 @@
+[
+  {
+    "id": "slide-title",
+    "line": 3,
+    "title": "Web Components for React"
+  },
+  {
+    "id": "slide-toc",
+    "line": 13,
+    "title": "目次"
+  },
+  {
+    "id": "slide-s1",
+    "line": 20,
+    "title": "見出しコンポーネント"
+  },
+  {
+    "id": "slide-s1-1",
+    "line": 27,
+    "title": "section / subsection"
+  },
+  {
+    "id": "slide-heading-desc",
+    "line": 34,
+    "title": "slide-section / slide-subsection"
+  },
+  {
+    "id": "slide-s1-1-1",
+    "line": 53,
+    "title": "subsubsection"
+  },
+  {
+    "id": "slide-subsubsection-desc",
+    "line": 60,
+    "title": "subsubsection のサンプル"
+  },
+  {
+    "id": "slide-s1-2",
+    "line": 74,
+    "title": "目次の自動生成"
+  },
+  {
+    "id": "slide-toc-desc",
+    "line": 81,
+    "title": "toc（目次）"
+  },
+  {
+    "id": "slide-s2",
+    "line": 104,
+    "title": "ボックスとレイアウト"
+  },
+  {
+    "id": "slide-s2-1",
+    "line": 111,
+    "title": "slide-box"
+  },
+  {
+    "id": "slide-box-demo",
+    "line": 118,
+    "title": "box — type 一覧"
+  },
+  {
+    "id": "slide-s2-2",
+    "line": 195,
+    "title": "slide-cols"
+  },
+  {
+    "id": "slide-cols-demo",
+    "line": 202,
+    "title": "cols — ratio 指定"
+  },
+  {
+    "id": "slide-s3",
+    "line": 261,
+    "title": "図・表・特殊レイアウト"
+  },
+  {
+    "id": "slide-s3-1",
+    "line": 268,
+    "title": "figure と D3"
+  },
+  {
+    "id": "slide-figure-demo",
+    "line": 275,
+    "title": "figure + D3.js"
+  },
+  {
+    "id": "slide-s3-2",
+    "line": 339,
+    "title": "テーブルと divider"
+  },
+  {
+    "id": "slide-table-demo",
+    "line": 346,
+    "title": "table クラス / divider"
+  },
+  {
+    "id": "slide-s3-3",
+    "line": 401,
+    "title": "statement レイアウト"
+  },
+  {
+    "id": "slide-statement-demo",
+    "line": 408,
+    "title": ""
+  },
+  {
+    "id": "slide-vcenter-demo",
+    "line": 415,
+    "title": "vcenter — 縦方向中央配置"
+  },
+  {
+    "id": "slide-summary",
+    "line": 439,
+    "title": "まとめ"
+  }
+]
