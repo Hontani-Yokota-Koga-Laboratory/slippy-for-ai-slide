@@ -500,7 +500,7 @@ export default function App() {
         <div className="w-px h-4 bg-gray-600 hidden sm:block" />
         <select
           value={project}
-          onChange={e => setProject(e.target.value)}
+          onChange={e => { location.href = `?project=${e.target.value}` }}
           className="bg-gray-700 text-white text-sm px-2 py-1 rounded border border-gray-600 max-w-[8rem] sm:max-w-none"
         >
           {projects.map(p => <option key={p} value={p}>{p}</option>)}
