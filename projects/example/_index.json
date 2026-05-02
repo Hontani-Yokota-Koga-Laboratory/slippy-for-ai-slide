@@ -85,33 +85,43 @@
     "title": "figure + D3.js"
   },
   {
-    "id": "slide-s3-2",
+    "id": "slide-s3-2-img",
     "line": 339,
+    "title": "画像の管理"
+  },
+  {
+    "id": "slide-image-demo",
+    "line": 346,
+    "title": "画像の挿入と同期"
+  },
+  {
+    "id": "slide-s3-2",
+    "line": 389,
     "title": "テーブルと divider"
   },
   {
     "id": "slide-table-demo",
-    "line": 346,
+    "line": 396,
     "title": "table クラス / divider"
   },
   {
     "id": "slide-s3-3",
-    "line": 401,
+    "line": 451,
     "title": "statement レイアウト"
   },
   {
     "id": "slide-statement-demo",
-    "line": 408,
+    "line": 458,
     "title": ""
   },
   {
     "id": "slide-vcenter-demo",
-    "line": 415,
+    "line": 465,
     "title": "vcenter — 縦方向中央配置"
   },
   {
     "id": "slide-summary",
-    "line": 439,
+    "line": 489,
     "title": "まとめ"
   }
 ]

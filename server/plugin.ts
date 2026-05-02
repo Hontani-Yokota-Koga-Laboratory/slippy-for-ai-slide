@@ -1,6 +1,6 @@
 import type { Plugin, ViteDevServer } from 'vite'
-import { readFile, writeFile, readdir } from 'node:fs/promises'
-import { join, resolve } from 'node:path'
+import { readFile, writeFile, readdir, mkdir } from 'node:fs/promises'
+import { join, resolve, extname } from 'node:path'
 import type { IncomingMessage, ServerResponse } from 'node:http'
 
 const ROOT = resolve(import.meta.dirname, '..')
@@ -137,6 +137,76 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse, server: 
       return res.end(Buffer.from(pdfBuffer))
     }
 
+    // GET /api/projects/:name/images → list images
+    const imagesMatch = path.match(/^projects\/([^/]+)\/images$/)
+    if (imagesMatch && req.method === 'GET') {
+      const project = imagesMatch[1]
+      const dirPath = join(ROOT, 'projects', project, 'images')
+      try {
+        const entries = await readdir(dirPath, { withFileTypes: true })
+        const filenames = entries
+          .filter(e => e.isFile() && !e.name.startsWith('.'))
+          .map(e => e.name)
+        return res.end(JSON.stringify(filenames))
+      } catch {
+        return res.end(JSON.stringify([]))
+      }
+    }
+
+    // GET /api/projects/:name/images/:filename → serve image
+    const imageMatch = path.match(/^projects\/([^/]+)\/images\/([^/]+)$/)
+    if (imageMatch) {
+      const project = imageMatch[1]
+      const filename = imageMatch[2]
+      const filePath = join(ROOT, 'projects', project, 'images', filename)
+
+      if (req.method === 'GET') {
+        try {
+          const content = await readFile(filePath)
+          const ext = extname(filename).toLowerCase()
+          const mimeTypes: Record<string, string> = {
+            '.png': 'image/png',
+            '.jpg': 'image/jpeg',
+            '.jpeg': 'image/jpeg',
+            '.gif': 'image/gif',
+            '.webp': 'image/webp',
+            '.svg': 'image/svg+xml'
+          }
+          res.setHeader('Content-Type', mimeTypes[ext] || 'application/octet-stream')
+          return res.end(content)
+        } catch {
+          res.statusCode = 404
+          return res.end(JSON.stringify({ error: 'Image not found' }))
+        }
+      }
+
+      if (req.method === 'DELETE') {
+        const { unlink } = await import('node:fs/promises')
+        try {
+          await unlink(filePath)
+          return res.end(JSON.stringify({ ok: true }))
+        } catch (err) {
+          res.statusCode = 500
+          return res.end(JSON.stringify({ error: String(err) }))
+        }
+      }
+    }
+
+    // POST /api/projects/:name/images → upload image
+    if (imagesMatch && req.method === 'POST') {
+      const project = imagesMatch[1]
+      const dirPath = join(ROOT, 'projects', project, 'images')
+      await mkdir(dirPath, { recursive: true })
+
+      const filename = url.searchParams.get('filename') || `pasted-${Date.now()}.png`
+      const filePath = join(dirPath, filename)
+
+      const body = await readBody(req)
+      await writeFile(filePath, body)
+
+      return res.end(JSON.stringify({ ok: true, filename }))
+    }
+
     res.statusCode = 404
     res.end(JSON.stringify({ error: 'Not found' }))
   } catch (err) {
@@ -145,11 +215,11 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse, server: 
   }
 }
 
-async function readBody(req: IncomingMessage): Promise<string> {
+async function readBody(req: IncomingMessage): Promise<Buffer> {
   return new Promise((resolve, reject) => {
-    let body = ''
-    req.on('data', chunk => { body += chunk })
-    req.on('end', () => resolve(body))
+    const chunks: Buffer[] = []
+    req.on('data', chunk => { chunks.push(chunk) })
+    req.on('end', () => resolve(Buffer.concat(chunks)))
     req.on('error', reject)
   })
 }

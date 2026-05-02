@@ -336,6 +336,56 @@
     ]
   },
   {
+    "id": "slide-s3-2-img",
+    "layout": "subsection",
+    "props": {
+      "title": "画像の管理"
+    }
+  },
+  {
+    "id": "slide-image-demo",
+    "layout": "content",
+    "props": {
+      "heading": "画像の挿入と同期"
+    },
+    "children": [
+      {
+        "id": "c-img-cols",
+        "type": "cols",
+        "props": {
+          "left": 1,
+          "right": 1
+        },
+        "columns": [
+          [
+            {
+              "id": "c-img-desc",
+              "type": "ul",
+              "items": [
+                "クリップボードからの貼り付けに対応",
+                "画像はプロジェクトごとの <code>images/</code> に保存",
+                "<code>npm run push-img</code> / <code>pull-img</code> で SSH サーバーと同期可能",
+                "複数人での開発や、ローカル・サーバー間の移動がスムーズ"
+              ]
+            }
+          ],
+          [
+            {
+              "id": "c-img-main",
+              "type": "image",
+              "props": {
+                "src": "pasted-2026-05-02T05-58-59.png",
+                "caption": "サンプル画像",
+                "width": 500,
+                "borderColor": "gray"
+              }
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
     "id": "slide-s3-2",
     "layout": "subsection",
     "props": {

@@ -3,17 +3,32 @@
 React + TypeScript でスライドを作成・編集するシステム。
 スライドデータは JSON 形式で保存され、D3.js や KaTeX を活用した高度な表現が可能。
 
-## ディレクトリ構成
+## トークン効率と開発原則
+
+Claude Code や Gemini CLI 等の AI ツールを使用する際、トークン消費を抑えつつ正確な編集を行うための最重要原則です。
+
+1.  **ファイルの小規模化**: 1ファイルは100行程度を目安にします。詳細は `architecture.md` を参照。
+2.  **サージカル（外科的）インデックス**: `_index.json` を使い、`slides.json` の必要なスライド行のみを読み書きしてください。詳細な手順は `AGENT.md` を参照。
+3.  **状態管理の分離**: ロジックは `hooks/` や `utils/` に分離し、UIコンポーネントを軽量に保ちます。
+
+### スライド作成時の参照ドキュメント
+
+スライドの JSON を書く際は、ソースコードや既存ファイルを探索する前に以下を参照してください：
+
+- **`SCHEMA.md`**: 全レイアウト・全ブロックの props 定義（型・説明・使用例付き）
+- **`SNIPPETS.md`**: そのままコピーして使える JSON テンプレート集
+
+## ディレクトリ構造
+
+詳細は `architecture.md` を参照してください。
 
 - `src/`: React アプリケーションのソースコード
-  - `components/`: スライドおよび各ブロックのコンポーネント
-  - `charts/`: D3.js チャートコンポーネント
-  - `editor/`: スライド編集 UI
-- `projects/`: 各スライドプロジェクト。各フォルダに `slides.json` を配置。
-- `server/`: Vite プラグイン形式の API サーバー（ファイル保存・PDF生成）
-- `past/`: 過去のプロジェクト（参照用。直接編集しない）
+- `projects/`: スライドプロジェクトデータ
+- `server/`: Vite プラグイン形式の API サーバー
+- `architecture.md`: アーキテクチャ詳細とAI最適化ガイドライン
 
 ## コマンド
+
 
 ```bash
 npm install     # 依存関係のインストール
@@ -30,23 +45,4 @@ npm run build   # ビルド
 
 ## コンポーネント定義
 
-### スライドレイアウト (`layout`)
-
-- `title`: タイトルスライド
-- `toc`: 目次（自動生成）
-- `section` / `subsection` / `subsubsection`: セクション見出し（自動採番）
-- `content`: コンテンツスライド
-- `statement`: 中央に大きなテキストを表示
-
-### コンテンツブロック (`type`)
-
-`content` レイアウトの `children` 内で使用：
-
-- `text`: 通常のテキスト（Markdownライクな一部HTMLタグ可、KaTeX対応）
-- `ul`: 箇条書き
-- `box`: 枠付きボックス (`variant`: blue, violet, cyan, green, amber, red)
-- `cols`: カラムレイアウト (`props.left`, `props.right` で比率指定)
-- `figure`: D3 チャート描画 (`props.chartId` で指定)
-- `table`: テーブル
-- `divider`: 区切り線
-- `h3`: 小見出し
+スキーマ・全 props・コピー用 JSON テンプレートは **`SCHEMA.md`** を参照。

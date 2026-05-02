@@ -4,5 +4,6 @@ import tailwindcss from '@tailwindcss/vite'
 import { slideServerPlugin } from './server/plugin'
 
 export default defineConfig({
+  publicDir: 'src/public',
   plugins: [react(), tailwindcss(), slideServerPlugin()],
 })

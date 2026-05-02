@@ -1,3 +1,6 @@
 venv/
 node_modules/
 dist/
+projects/*/images/
+output/*
+!output/.gitignore

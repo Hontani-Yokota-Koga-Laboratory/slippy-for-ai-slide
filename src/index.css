@@ -86,12 +86,15 @@
 
 .slide-canvas ul,
 .slide-canvas ol {
-  margin-left: 1.3em;
+  /* margin-left: 1.3em; */
   line-height: 1.75;
   margin-top: 0;
   margin-bottom: 0.6em;
-  padding: 0;
+  padding-left: 1em;
 }
+
+.slide-canvas ul { list-style-type: disc; }
+.slide-canvas ol { list-style-type: decimal; }
 
 .slide-canvas li { margin-bottom: 0.2em; }
 
@@ -245,7 +248,7 @@
 
 /* ── TOC ─────────────────────────────────────────────────────────────────── */
 
-.toc-list {
+.slide-canvas .toc-list {
   list-style: none;
   margin: 0;
   padding: 0;

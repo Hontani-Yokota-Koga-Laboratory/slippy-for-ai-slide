@@ -1,0 +1,285 @@
+[
+  {
+    "id": "slide-title",
+    "layout": "title",
+    "props": {
+      "heading": "Vim のすすめ",
+      "tag": "なぜ今もエディタの王者なのか",
+      "author": "senntou",
+      "date": "auto"
+    }
+  },
+  {
+    "id": "slide-toc",
+    "layout": "toc",
+    "props": { "heading": "目次" }
+  },
+  {
+    "id": "slide-s1",
+    "layout": "section",
+    "props": { "title": "モーダル編集という思想" }
+  },
+  {
+    "id": "slide-s1-modal",
+    "layout": "content",
+    "props": { "heading": "モーダル編集とは" },
+    "children": [
+      {
+        "id": "c-modal-text",
+        "type": "text",
+        "children": "Vim には複数の<strong>モード</strong>があり、それぞれキーの役割が変わります。"
+      },
+      {
+        "id": "c-modal-table",
+        "type": "table",
+        "props": {
+          "headers": ["モード", "目的", "入り方"],
+          "rows": [
+            ["Normal", "移動・操作の起点", "Esc"],
+            ["Insert", "テキスト入力", "<code>i</code> / <code>a</code>"],
+            ["Visual", "範囲選択", "<code>v</code> / <code>V</code>"],
+            ["Command", "保存・終了などのコマンド", "<code>:</code>"]
+          ],
+          "fontSize": 0.95
+        }
+      },
+      {
+        "id": "c-modal-box",
+        "type": "box",
+        "props": { "variant": "green", "label": "ポイント" },
+        "children": "「入力」と「操作」を分離することで、ホームポジションから手を離さずあらゆる編集が可能になる。"
+      }
+    ]
+  },
+  {
+    "id": "slide-s2",
+    "layout": "section",
+    "props": { "title": "高速移動コマンド" }
+  },
+  {
+    "id": "slide-s2-motion",
+    "layout": "content",
+    "props": { "heading": "カーソル移動の基本" },
+    "children": [
+      {
+        "id": "c-motion-cols",
+        "type": "cols",
+        "props": { "left": 1, "right": 1, "gap": 32 },
+        "columns": [
+          [
+            { "id": "c-motion-l-h3", "type": "h3", "children": "文字・単語単位" },
+            {
+              "id": "c-motion-l-ul",
+              "type": "ul",
+              "items": [
+                "<code>h j k l</code> — 左下上右",
+                "<code>w / b</code> — 単語の先頭へ前進 / 後退",
+                "<code>e</code> — 単語の末尾へ",
+                "<code>f{c}</code> — 行内の文字 <code>c</code> へジャンプ"
+              ]
+            }
+          ],
+          [
+            { "id": "c-motion-r-h3", "type": "h3", "children": "行・ファイル単位" },
+            {
+              "id": "c-motion-r-ul",
+              "type": "ul",
+              "items": [
+                "<code>0 / $</code> — 行頭 / 行末",
+                "<code>gg / G</code> — ファイル先頭 / 末尾",
+                "<code>{n}G</code> — n行目へ",
+                "<code>Ctrl-d / Ctrl-u</code> — 半画面スクロール"
+              ]
+            }
+          ]
+        ]
+      },
+      {
+        "id": "c-motion-box",
+        "type": "box",
+        "props": { "variant": "blue", "label": "定義" },
+        "children": "<strong>モーション</strong>とは「カーソルを動かす操作」のこと。<code>d</code>（削除）などのオペレータと組み合わせて強力なコマンドになる。"
+      }
+    ]
+  },
+  {
+    "id": "slide-s2-operator",
+    "layout": "content",
+    "props": { "heading": "オペレータ × モーション = 無限の表現力" },
+    "children": [
+      {
+        "id": "c-op-text",
+        "type": "text",
+        "children": "Vim のコマンドは <strong>operator + motion</strong> の文法で成り立っています。"
+      },
+      {
+        "id": "c-op-table",
+        "type": "table",
+        "props": {
+          "headers": ["コマンド", "意味"],
+          "rows": [
+            ["<code>dw</code>", "次の単語を削除"],
+            ["<code>d$</code>", "カーソル位置から行末まで削除"],
+            ["<code>ciw</code>", "単語全体を変更（c = change）"],
+            ["<code>y3j</code>", "3行下までヤンク（コピー）"],
+            ["<code>></code>G", "現在行からファイル末尾までインデント"]
+          ],
+          "fontSize": 0.95
+        }
+      },
+      {
+        "id": "c-op-box",
+        "type": "box",
+        "props": { "variant": "amber", "label": "例" },
+        "children": "<code>d</code>（削除）・<code>y</code>（ヤンク）・<code>c</code>（変更）・<code>></code>/<code><</code>（インデント）はすべて同じモーションで動く。"
+      }
+    ]
+  },
+  {
+    "id": "slide-s3",
+    "layout": "section",
+    "props": { "title": "テキストオブジェクト" }
+  },
+  {
+    "id": "slide-s3-textobj",
+    "layout": "content",
+    "props": { "heading": "構造を意識した編集" },
+    "children": [
+      {
+        "id": "c-to-text",
+        "type": "text",
+        "children": "テキストオブジェクトは「単語」「文」「括弧の中身」などを意味的な単位として扱います。"
+      },
+      {
+        "id": "c-to-cols",
+        "type": "cols",
+        "props": { "left": 1, "right": 1, "gap": 32 },
+        "columns": [
+          [
+            { "id": "c-to-l-h3", "type": "h3", "children": "<code>i</code> (inner)" },
+            {
+              "id": "c-to-l-ul",
+              "type": "ul",
+              "items": [
+                "<code>ciw</code> — 単語の中身を変更",
+                "<code>ci(</code> — <code>()</code> の中身を変更",
+                "<code>ci\"</code> — <code>\"\"</code> の中身を変更",
+                "<code>cit</code> — HTMLタグの中身を変更"
+              ]
+            }
+          ],
+          [
+            { "id": "c-to-r-h3", "type": "h3", "children": "<code>a</code> (around)" },
+            {
+              "id": "c-to-r-ul",
+              "type": "ul",
+              "items": [
+                "<code>daw</code> — 単語と前後の空白を削除",
+                "<code>da(</code> — <code>()</code> ごと削除",
+                "<code>da\"</code> — <code>\"\"</code> ごと削除",
+                "<code>dat</code> — HTMLタグごと削除"
+              ]
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "slide-s4",
+    "layout": "section",
+    "props": { "title": "マクロと繰り返し" }
+  },
+  {
+    "id": "slide-s4-macro",
+    "layout": "content",
+    "props": { "heading": "同じ操作を一瞬で繰り返す" },
+    "children": [
+      {
+        "id": "c-macro-cols",
+        "type": "cols",
+        "props": { "left": 1, "right": 1, "gap": 32 },
+        "columns": [
+          [
+            { "id": "c-macro-l-h3", "type": "h3", "children": "ドットコマンド <code>.</code>" },
+            {
+              "id": "c-macro-l-ul",
+              "type": "ul",
+              "items": [
+                "直前の変更操作を再実行",
+                "例: <code>ciw\"word\"</code> → <code>.</code> で繰り返し",
+                "シンプルな繰り返しに最適"
+              ]
+            }
+          ],
+          [
+            { "id": "c-macro-r-h3", "type": "h3", "children": "マクロ <code>q{reg}</code>" },
+            {
+              "id": "c-macro-r-ul",
+              "type": "ul",
+              "items": [
+                "<code>qa</code> — レジスタ <code>a</code> に記録開始",
+                "操作を実行",
+                "<code>q</code> — 記録終了",
+                "<code>@a</code> — 再生 / <code>100@a</code> で100回"
+              ]
+            }
+          ]
+        ]
+      },
+      {
+        "id": "c-macro-box",
+        "type": "box",
+        "props": { "variant": "violet", "label": "定理" },
+        "children": "マクロは「編集操作のプログラム」。複雑な繰り返し変換でも、記録→再生で自動化できる。"
+      }
+    ]
+  },
+  {
+    "id": "slide-s5",
+    "layout": "section",
+    "props": { "title": "その他の強み" }
+  },
+  {
+    "id": "slide-s5-misc",
+    "layout": "content",
+    "props": { "heading": "Vim が選ばれる理由" },
+    "children": [
+      {
+        "id": "c-misc-ul",
+        "type": "ul",
+        "items": [
+          "<strong>どこでも使える</strong> — SSH先のサーバー、コンテナ内、古いUNIX環境でも標準インストール済み",
+          "<strong>超高速起動</strong> — 重いIDEと違い、ファイルを即座に開ける",
+          "<strong>高い拡張性</strong> — Neovim + LSP でモダンなIDE機能も実現",
+          "<strong>キーボード完結</strong> — マウス不要でフロー状態を維持しやすい",
+          "<strong>学習資産の永続性</strong> — 習得した操作は30年後も通用する"
+        ]
+      },
+      {
+        "id": "c-misc-box",
+        "type": "box",
+        "props": { "variant": "red", "label": "注意" },
+        "children": "学習コストは高いが、習熟すれば<strong>エディタを意識しない</strong>レベルに到達できる。<code>vimtutor</code> で30分の練習から始めよう。"
+      }
+    ]
+  },
+  {
+    "id": "slide-summary",
+    "layout": "content",
+    "props": { "heading": "まとめ" },
+    "children": [
+      {
+        "id": "c-summary-box",
+        "type": "box",
+        "props": { "variant": "green", "label": "まとめ" },
+        "children": "・<strong>モーダル編集</strong>で「入力」と「操作」を分離し、ホームポジションから離れない\n・<strong>operator + motion</strong> の文法で編集を簡潔に表現できる\n・<strong>テキストオブジェクト</strong>で構造を意識した直感的な編集が可能\n・<strong>マクロ</strong>で複雑な繰り返しも一瞬で自動化\n・どこでも動き、学習資産が永続する信頼のエディタ"
+      },
+      {
+        "id": "c-summary-text",
+        "type": "text",
+        "children": "まずは <code>vimtutor</code> を実行してみましょう。"
+      }
+    ]
+  }
+]

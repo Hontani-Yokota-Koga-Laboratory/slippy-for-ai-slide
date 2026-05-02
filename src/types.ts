@@ -67,10 +67,23 @@ export interface VCenterComponent {
   children: SlideComponent[]
 }
 
+export interface ImageComponent {
+  type: 'image'
+  id: string
+  props: {
+    src: string
+    caption?: string
+    width?: number
+    height?: number
+    borderColor?: string
+  }
+}
+
 export type SlideComponent =
   | BoxComponent
   | ColsComponent
   | FigureComponent
+  | ImageComponent
   | TextComponent
   | H3Component
   | UlComponent

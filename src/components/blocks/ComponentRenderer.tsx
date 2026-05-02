@@ -1,6 +1,7 @@
 import type { SlideComponent } from '../../types'
 import { SlideBox } from './SlideBox'
 import { SlideFigure } from './SlideFigure'
+import { SlideImage } from './SlideImage'
 import { MathText } from '../MathText'
 
 interface Props {
@@ -45,6 +46,9 @@ export function ComponentRenderer({ block, selectedId, onSelect }: Props) {
 
     case 'figure':
       return <SlideFigure block={block} selected={isSelected} onClick={handleClick} />
+
+    case 'image':
+      return <SlideImage block={block} selected={isSelected} onClick={handleClick} />
 
     case 'text': {
       const fs = block.props?.fontSize

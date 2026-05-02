@@ -12,6 +12,26 @@ You are an expert developer specializing in React, TypeScript, and data visualiz
 - **Slide Data**: Stored in `projects/<project-name>/slides.json`.
 - **Charts**: Custom D3.js charts are located in `src/charts/` and registered in `src/charts/registry.ts`.
 
+## Token-Efficient Slide Management
+
+**Never read the full `slides.json`.** Follow the Surgical Indexing workflow:
+
+### Reading a specific slide
+
+1. Read `projects/<project>/_index.json` to get the `line` number for the target slide ID.
+2. Read only that range from `slides.json` using `offset` and `limit` (Read tool) or `start_line`/`end_line`.
+   - The next entry's `line` in `_index.json` is the end boundary; add a few lines of margin.
+   - Example: entry at line 27, next entry at line 53 → read lines 27–55.
+
+### Editing a slide
+
+Edit only the lines you identified above. Do not rewrite surrounding slides.
+
+### After editing `slides.json`
+
+- **Automatic**: `npm run dev` watches for changes and updates `_index.json` automatically.
+- **Manual fallback**: run `node scripts/update_indices.cjs` if the dev server is not running.
+
 ## Core Workflows
 
 ### 1. Creating a New Project
@@ -51,13 +71,14 @@ You are an expert developer specializing in React, TypeScript, and data visualiz
 - **Purity**: Keep slide rendering logic decoupled from editor state where possible.
 - **D3**: Prefer React-centric D3 (let React manage the DOM, use D3 for scales/math) or use `useEffect` for D3-managed DOM if necessary.
 
-## Slide Data Schema (`slides.json`)
+## Slide Data Schema
 
-Each slide is an object:
-- `id`: Unique string.
-- `layout`: `title` | `toc` | `section` | `subsection` | `subsubsection` | `content` | `statement`.
-- `props`: Object containing layout-specific properties (e.g., `heading`, `author`).
-- `children` (for `content` layout): Array of `SlideComponent` objects.
+**Do not read source files or existing slides.json to learn the schema.** Use the dedicated docs instead:
 
-`SlideComponent` types:
-- `text`, `h3`, `ul`, `box`, `cols`, `figure`, `table`, `divider`.
+- **`SCHEMA.md`** — full props spec and copy-paste JSON templates for every layout and block type
+
+Quick reference:
+- Layouts: `title` | `toc` | `section` | `subsection` | `subsubsection` | `content` | `statement`
+- Blocks (in `content.children`): `text` | `h3` | `ul` | `box` | `cols` | `figure` | `table` | `divider` | `vcenter`
+- Overlays (in `content.overlays`): `abs-textbox`
+- Charts: project-local, defined in `projects/<project>/charts/<ChartName>.tsx`
