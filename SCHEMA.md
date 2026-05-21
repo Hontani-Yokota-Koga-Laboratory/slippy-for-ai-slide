@@ -84,6 +84,19 @@
 }
 ```
 
+### `image` — 画像
+```json
+{ "id": "c-img", "type": "image", "props": { "src": "screenshot.jpg", "caption": "画像の説明", "width": 800 } }
+```
+- `src`: `projects/<project>/images/` に置いたファイル名
+- `src` を `"_placeholder"` または省略すると、破線枠 + `caption` のプレースホルダー表示になる（画像未確定の段階で使用）
+- `caption` / `width`（px）/ `height`（px）/ `borderColor` は省略可
+
+**プレースホルダー例**（実際の画像が手元にない場合）:
+```json
+{ "id": "c-img", "type": "image", "props": { "src": "_placeholder", "caption": "ここに Neovim の画面スクリーンショットを入れる", "width": 900, "height": 400 } }
+```
+
 ### `figure` — チャート
 ```json
 { "id": "c-fig", "type": "figure", "props": { "chartId": "ChartName", "caption": "図の説明", "width": 400, "height": 300 } }

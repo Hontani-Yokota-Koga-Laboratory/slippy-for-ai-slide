@@ -333,12 +333,64 @@
 .slide-box.box-red    .slide-box-label { background: var(--box-red-lbl-bg);    color: var(--box-red-lbl-fg); }
 .slide-box.box-red    .slide-box-body  { background: var(--box-red-body-bg); }
 
+/* ── Key Points ──────────────────────────────────────────────────────────── */
+
+.slide-key-points {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  margin: 14px 0;
+  font-size: 0.88em;
+}
+
+.slide-key-points:first-child { margin-top: 0; }
+.slide-key-points:last-child  { margin-bottom: 0; }
+
+.kp-item {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 128px 1fr;
+  align-items: center;
+  gap: 0 20px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+  line-height: 1.55;
+}
+
+.kp-item:first-child { border-top: 1px solid rgba(0, 0, 0, 0.07); }
+
+.kp-label {
+  font-weight: 600;
+  color: var(--kp-accent);
+  letter-spacing: 0.01em;
+}
+
+.kp-body {
+  color: var(--slide-fg);
+}
+
+.kp-green  { --kp-accent: var(--box-green-border); }
+.kp-blue   { --kp-accent: var(--box-blue-border); }
+.kp-violet { --kp-accent: var(--box-violet-border); }
+.kp-cyan   { --kp-accent: var(--box-cyan-border); }
+.kp-amber  { --kp-accent: var(--box-amber-border); }
+.kp-red    { --kp-accent: var(--box-red-border); }
+
 /* ── Columns ─────────────────────────────────────────────────────────────── */
 
 .slide-cols {
   display: grid;
   gap: 24px;
-  align-items: start;
+  align-items: stretch;
+}
+
+.slide-cols > div {
+  display: flex;
+  flex-direction: column;
+  gap: var(--col-row-gap, 14px);
+}
+
+.slide-cols .slide-box {
+  margin: 0;
 }
 
 /* column template is set via inline style: gridTemplateColumns: `${left}fr ${right}fr` */

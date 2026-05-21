@@ -1,0 +1,117 @@
+[
+  {
+    "id": "slide-title",
+    "line": 3,
+    "title": "Neovim 入門"
+  },
+  {
+    "id": "slide-toc",
+    "line": 13,
+    "title": "目次"
+  },
+  {
+    "id": "slide-s1",
+    "line": 20,
+    "title": "Vim とは"
+  },
+  {
+    "id": "slide-s1-what",
+    "line": 27,
+    "title": "Vim はテキストエディタ"
+  },
+  {
+    "id": "slide-s1-diff",
+    "line": 46,
+    "title": "VSCode との違い"
+  },
+  {
+    "id": "slide-s1-modes",
+    "line": 76,
+    "title": "Vim の特徴 ― モード編集"
+  },
+  {
+    "id": "slide-s1-demo",
+    "line": 123,
+    "title": ""
+  },
+  {
+    "id": "slide-s2",
+    "line": 130,
+    "title": "Vim の魅力"
+  },
+  {
+    "id": "slide-s2-keyboard",
+    "line": 137,
+    "title": "マウスに手を伸ばす時間がゼロになる"
+  },
+  {
+    "id": "slide-s2-speed",
+    "line": 234,
+    "title": ""
+  },
+  {
+    "id": "slide-s2-custom",
+    "line": 241,
+    "title": "カスタマイズ性"
+  },
+  {
+    "id": "slide-s3",
+    "line": 268,
+    "title": "学習コストの話"
+  },
+  {
+    "id": "slide-s3-honest",
+    "line": 275,
+    "title": ""
+  },
+  {
+    "id": "slide-s3-steps",
+    "line": 282,
+    "title": "でも、段階的に慣れられる"
+  },
+  {
+    "id": "slide-s3-ai",
+    "line": 312,
+    "title": "AI 時代、カスタマイズのハードルは下がった"
+  },
+  {
+    "id": "slide-s4",
+    "line": 357,
+    "title": "How to Start"
+  },
+  {
+    "id": "slide-s4-vscode",
+    "line": 364,
+    "title": "Step 1 — まず VSCode で体験する"
+  },
+  {
+    "id": "slide-s4-neovim",
+    "line": 391,
+    "title": "Step 2 — Neovim をインストールする"
+  },
+  {
+    "id": "slide-s5",
+    "line": 419,
+    "title": "プラグインの設定"
+  },
+  {
+    "id": "slide-s5-plugins",
+    "line": 426,
+    "title": "プラグインで IDE に変わる"
+  },
+  {
+    "id": "slide-s5-distro",
+    "line": 481,
+    "title": "迷ったらディストリビューションから始める"
+  },
+  {
+    "id": "slide-s5-demo",
+    "line": 524,
+    "title": ""
+  },
+  {
+    "id": "slide-summary",
+    "line": 531,
+    "title": "まとめ"
+  }
+]

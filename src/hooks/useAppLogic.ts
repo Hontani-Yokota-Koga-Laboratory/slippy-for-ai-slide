@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import type { Slide, TocEntry, SlideComponent, MoveTarget, OverlayComponent } from '../types'
 import type { SectionInfo } from '../utils/sections'
 import { computeSectionNumbers, computeTocEntries } from '../utils/sections'
+import { useUndoHistory } from './useUndoHistory'
 import {
   updateSlideProps,
   updateSlideComponent,
@@ -24,6 +25,7 @@ export function getUrlParams() {
     project: p.get('project') ?? 'example',
     slide:   p.get('slide') ?? null,
     print:   p.get('print') === '1',
+    present: p.get('present') === '1',
     theme:   p.get('theme') ?? undefined,
   }
 }
@@ -42,8 +44,12 @@ export function useAppLogic() {
 
   const [project] = useState(initialProject)
   const [theme, setTheme] = useState(initialTheme ?? 'light')
+  const [lang, setLang] = useState('ja')
   const [projects, setProjects] = useState<string[]>([])
   const [slides, setSlides] = useState<Slide[]>([])
+  const slidesRef = useRef<Slide[]>([])
+  slidesRef.current = slides
+  const { push: pushHistory, undo, redo, canUndo, canRedo } = useUndoHistory(setSlides, slidesRef)
   const [sectionNumbers, setSectionNumbers] = useState<Map<string, SectionInfo>>(new Map())
   const [tocEntries, setTocEntries] = useState<TocEntry[]>([])
   const [selectedSlideId, setSelectedSlideId] = useState<string | null>(initialSlide)
@@ -81,6 +87,9 @@ export function useAppLogic() {
       .then(data => {
         if (data.theme && !initialTheme) {
           setTheme(data.theme)
+        }
+        if (data.lang) {
+          setLang(data.lang)
         }
       })
   }, [project, initialTheme])
@@ -133,7 +142,13 @@ export function useAppLogic() {
       const active = document.activeElement
       if (active?.tagName === 'INPUT' || active?.tagName === 'TEXTAREA') return
 
-      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) {
+        e.preventDefault()
+        undo()
+      } else if ((e.ctrlKey || e.metaKey) && e.key === 'y') {
+        e.preventDefault()
+        redo()
+      } else if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
         handleNavigate(1)
       } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
         handleNavigate(-1)
@@ -184,17 +199,39 @@ export function useAppLogic() {
 
             if (res.ok) {
               const data = await res.json()
-              const newComp: SlideComponent = {
-                type: 'image',
-                id: newId(),
-                props: { src: data.filename, caption: '' },
-              }
 
-              setSlides(prev => prev.map(slide => {
-                if (slide.id !== selectedSlideId || slide.layout !== 'content') return slide
-                return { ...slide, children: [...slide.children, newComp] }
-              }))
-              setSelectedComponentId(newComp.id)
+              const selectedComp = slides
+                .find(s => s.id === selectedSlideId && s.layout === 'content')
+                ?.children.find(c => c.id === selectedComponentId)
+
+              const isPlaceholder =
+                selectedComp?.type === 'image' &&
+                (!selectedComp.props.src || selectedComp.props.src === '_placeholder')
+
+              if (isPlaceholder && selectedComponentId) {
+                setSlides(prev => prev.map(slide => {
+                  if (slide.id !== selectedSlideId || slide.layout !== 'content') return slide
+                  return {
+                    ...slide,
+                    children: slide.children.map(c =>
+                      c.id === selectedComponentId
+                        ? { ...c, props: { ...c.props, src: data.filename } }
+                        : c
+                    ),
+                  }
+                }))
+              } else {
+                const newComp: SlideComponent = {
+                  type: 'image',
+                  id: newId(),
+                  props: { src: data.filename, caption: '' },
+                }
+                setSlides(prev => prev.map(slide => {
+                  if (slide.id !== selectedSlideId || slide.layout !== 'content') return slide
+                  return { ...slide, children: [...slide.children, newComp] }
+                }))
+                setSelectedComponentId(newComp.id)
+              }
             }
           } catch (err) {
             console.error('Failed to upload pasted image:', err)
@@ -205,7 +242,7 @@ export function useAppLogic() {
 
     window.addEventListener('paste', handlePaste)
     return () => window.removeEventListener('paste', handlePaste)
-  }, [project, selectedSlideId, setSlides])
+  }, [project, slides, selectedSlideId, selectedComponentId, setSlides])
 
   const startLeftDrag = useCallback((e: React.MouseEvent) => {
     e.preventDefault()
@@ -250,6 +287,7 @@ export function useAppLogic() {
   const handleAddComponent = useCallback((index: number, type: SlideComponent['type']) => {
     if (!selectedSlideId) return
     const newComp = createDefaultComponent(type)
+    pushHistory(slidesRef.current, { slideId: selectedSlideId, componentId: null, propKey: null })
     setSlides(prev => prev.map(slide => {
       if (slide.id !== selectedSlideId || slide.layout !== 'content') return slide
       const children = [...slide.children]
@@ -261,6 +299,7 @@ export function useAppLogic() {
 
   const handleDeleteComponent = useCallback((id: string) => {
     if (!selectedSlideId) return
+    pushHistory(slidesRef.current, { slideId: selectedSlideId, componentId: null, propKey: null })
     setSlides(prev => prev.map(slide => {
       if (slide.id !== selectedSlideId || slide.layout !== 'content') return slide
       return { ...slide, children: deleteComponentFromList(slide.children, id) }
@@ -270,6 +309,7 @@ export function useAppLogic() {
 
   const handleMoveUpDown = useCallback((id: string, dir: 'up' | 'down') => {
     if (!selectedSlideId) return
+    pushHistory(slidesRef.current, { slideId: selectedSlideId, componentId: null, propKey: null })
     setSlides(prev => prev.map(slide => {
       if (slide.id !== selectedSlideId || slide.layout !== 'content') return slide
       return { ...slide, children: moveUpDownInComponents(slide.children, id, dir) }
@@ -278,6 +318,7 @@ export function useAppLogic() {
 
   const handleLayerMove = useCallback((sourceId: string, target: MoveTarget) => {
     if (!selectedSlideId) return
+    pushHistory(slidesRef.current, { slideId: selectedSlideId, componentId: null, propKey: null })
     setSlides(prev => prev.map(slide => {
       if (slide.id !== selectedSlideId || slide.layout !== 'content') return slide
       const [without, extracted] = extractComponent(slide.children, sourceId)
@@ -289,6 +330,7 @@ export function useAppLogic() {
   const handleAddOverlay = useCallback((_type: OverlayComponent['type']) => {
     if (!selectedSlideId) return
     const overlay = createDefaultOverlay()
+    pushHistory(slidesRef.current, { slideId: selectedSlideId, componentId: null, propKey: null })
     setSlides(prev => prev.map(slide => {
       if (slide.id !== selectedSlideId || slide.layout !== 'content') return slide
       return { ...slide, overlays: [...(slide.overlays ?? []), overlay] }
@@ -298,6 +340,7 @@ export function useAppLogic() {
 
   const handleDeleteOverlay = useCallback((id: string) => {
     if (!selectedSlideId) return
+    pushHistory(slidesRef.current, { slideId: selectedSlideId, componentId: null, propKey: null })
     setSlides(prev => prev.map(slide => {
       if (slide.id !== selectedSlideId || slide.layout !== 'content') return slide
       return { ...slide, overlays: (slide.overlays ?? []).filter(o => o.id !== id) }
@@ -307,6 +350,7 @@ export function useAppLogic() {
 
   const handleMoveOverlay = useCallback((id: string, x: number, y: number) => {
     if (!selectedSlideId) return
+    pushHistory(slidesRef.current, { slideId: selectedSlideId, componentId: id, propKey: 'position' })
     setSlides(prev => prev.map(slide => {
       if (slide.id !== selectedSlideId || slide.layout !== 'content') return slide
       return {
@@ -320,6 +364,7 @@ export function useAppLogic() {
 
   const handleReorderComponent = useCallback((activeId: string, overId: string) => {
     if (!selectedSlideId || activeId === overId) return
+    pushHistory(slidesRef.current, { slideId: selectedSlideId, componentId: null, propKey: null })
     setSlides(prev => prev.map(slide => {
       if (slide.id !== selectedSlideId || slide.layout !== 'content') return slide
       return { ...slide, children: reorderInTree(slide.children, activeId, overId) }
@@ -328,12 +373,14 @@ export function useAppLogic() {
 
   const handlePropsChange = useCallback((componentId: string | null, newProps: Record<string, unknown>) => {
     if (!selectedSlideId) return
+    const propKey = Object.keys(newProps)[0] ?? null
+    pushHistory(slidesRef.current, { slideId: selectedSlideId, componentId, propKey })
     setSlides(prev =>
       componentId
         ? updateSlideComponent(prev, selectedSlideId, componentId, newProps)
         : updateSlideProps(prev, selectedSlideId, newProps)
     )
-  }, [selectedSlideId])
+  }, [selectedSlideId, pushHistory])
 
   const save = async () => {
     setSaving(true)
@@ -441,6 +488,7 @@ export function useAppLogic() {
     project,
     theme,
     setTheme,
+    lang,
     projects,
     slides,
     sectionNumbers,
@@ -470,6 +518,10 @@ export function useAppLogic() {
     handleDeleteOverlay,
     handleMoveOverlay,
     handlePropsChange,
+    undo,
+    redo,
+    canUndo,
+    canRedo,
     save,
     generatePdf,
     cleanUnusedImages,

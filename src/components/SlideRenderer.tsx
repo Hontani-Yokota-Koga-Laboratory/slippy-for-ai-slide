@@ -11,14 +11,15 @@ interface Props {
   pageNum: number
   sectionNumbers: Map<string, SectionInfo>
   tocEntries: TocEntry[]
+  lang?: string
   selectedComponentId?: string
   onSelectComponent?: (id: string) => void
 }
 
-export function SlideRenderer({ slide, pageNum, sectionNumbers, tocEntries, selectedComponentId, onSelectComponent }: Props) {
+export function SlideRenderer({ slide, pageNum, sectionNumbers, tocEntries, lang, selectedComponentId, onSelectComponent }: Props) {
   switch (slide.layout) {
     case 'title':
-      return <TitleSlide slide={slide} pageNum={pageNum} />
+      return <TitleSlide slide={slide} pageNum={pageNum} lang={lang} />
 
     case 'toc':
       return <TocSlide slide={slide} entries={tocEntries} pageNum={pageNum} />

@@ -1,0 +1,6 @@
+# sync_images.sh の設定ファイル
+# このファイルをコピーして .sync_config を作成し、各自の環境に合わせて編集してください
+# cp .sync_config.sample .sync_config
+
+HOST="aldebaran"
+REMOTE_BASE="~/.images_for_ai_slide"

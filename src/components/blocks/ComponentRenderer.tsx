@@ -2,6 +2,7 @@ import type { SlideComponent } from '../../types'
 import { SlideBox } from './SlideBox'
 import { SlideFigure } from './SlideFigure'
 import { SlideImage } from './SlideImage'
+import { SlideKeyPoints } from './SlideKeyPoints'
 import { MathText } from '../MathText'
 
 interface Props {
@@ -20,12 +21,15 @@ export function ComponentRenderer({ block, selectedId, onSelect }: Props) {
     case 'box':
       return <SlideBox block={block} selected={isSelected} onClick={handleClick} />
 
+    case 'key-points':
+      return <SlideKeyPoints block={block} selected={isSelected} onClick={handleClick} />
+
     case 'cols': {
-      const { left, right, gap = 24 } = block.props
+      const { left, right, gap = 24, rowGap = 14 } = block.props
       return (
         <div
           className={`slide-cols${isSelected ? ' selected-component' : ''}`}
-          style={{ gridTemplateColumns: `${left}fr ${right}fr`, gap }}
+          style={{ gridTemplateColumns: `${left}fr ${right}fr`, gap, '--col-row-gap': `${rowGap}px` } as React.CSSProperties}
           onClick={handleClick}
         >
           {block.columns.map((col, i) => (

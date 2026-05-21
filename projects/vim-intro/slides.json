@@ -3,184 +3,352 @@
     "id": "slide-title",
     "layout": "title",
     "props": {
-      "heading": "Vim のすすめ",
-      "tag": "なぜ今もエディタの王者なのか",
-      "author": "senntou",
+      "heading": "Neovim 入門",
+      "tag": "Vim布教スライド",
+      "author": "鐘ヶ江",
       "date": "auto"
     }
   },
   {
     "id": "slide-toc",
     "layout": "toc",
-    "props": { "heading": "目次" }
+    "props": {
+      "heading": "目次"
+    }
   },
   {
     "id": "slide-s1",
     "layout": "section",
-    "props": { "title": "モーダル編集という思想" }
+    "props": {
+      "title": "Vim とは"
+    }
   },
   {
-    "id": "slide-s1-modal",
+    "id": "slide-s1-what",
     "layout": "content",
-    "props": { "heading": "モーダル編集とは" },
+    "props": {
+      "heading": "Vim はテキストエディタ"
+    },
     "children": [
       {
-        "id": "c-modal-text",
-        "type": "text",
-        "children": "Vim には複数の<strong>モード</strong>があり、それぞれキーの役割が変わります。"
-      },
-      {
-        "id": "c-modal-table",
-        "type": "table",
+        "id": "c-what-img",
+        "type": "image",
         "props": {
-          "headers": ["モード", "目的", "入り方"],
-          "rows": [
-            ["Normal", "移動・操作の起点", "Esc"],
-            ["Insert", "テキスト入力", "<code>i</code> / <code>a</code>"],
-            ["Visual", "範囲選択", "<code>v</code> / <code>V</code>"],
-            ["Command", "保存・終了などのコマンド", "<code>:</code>"]
-          ],
-          "fontSize": 0.95
+          "src": "pasted-2026-05-04T06-35-26.jpg",
+          "caption": "Neovim の画面（ターミナル上で動作している様子）",
+          "width": 960,
+          "height": 500
         }
-      },
-      {
-        "id": "c-modal-box",
-        "type": "box",
-        "props": { "variant": "green", "label": "ポイント" },
-        "children": "「入力」と「操作」を分離することで、ホームポジションから手を離さずあらゆる編集が可能になる。"
       }
     ]
   },
   {
-    "id": "slide-s2",
-    "layout": "section",
-    "props": { "title": "高速移動コマンド" }
-  },
-  {
-    "id": "slide-s2-motion",
+    "id": "slide-s1-diff",
     "layout": "content",
-    "props": { "heading": "カーソル移動の基本" },
+    "props": {
+      "heading": "VSCode との違い"
+    },
     "children": [
       {
-        "id": "c-motion-cols",
+        "id": "c-diff-ul",
+        "type": "ul",
+        "items": [
+          "ターミナル上で動く（GUI なし）",
+          "マウスは使わない",
+          "キーボードだけですべての操作を行う"
+        ],
+        "props": {
+          "fontSize": 1.1
+        }
+      },
+      {
+        "id": "c-diff-box",
+        "type": "box",
+        "props": {
+          "variant": "blue",
+          "label": "イメージ"
+        },
+        "children": "「VSCode からマウスと GUI を取り除いて、キーボード操作を極めたエディタ」"
+      }
+    ]
+  },
+  {
+    "id": "slide-s1-modes",
+    "layout": "content",
+    "props": {
+      "heading": "Vim の特徴 ― モード編集"
+    },
+    "children": [
+      {
+        "id": "c-modes-ul",
+        "type": "ul",
+        "items": [
+          "<strong>Normal モード</strong> — 移動・コピー・削除などの操作（デフォルト）",
+          "<strong>Insert モード</strong> — 文字を入力するモード（<code>i</code> で移行）",
+          "<strong>Visual モード</strong> — テキストを選択するモード（<code>v</code> で移行）"
+        ]
+      },
+      {
+        "id": "c-modes-table",
+        "type": "table",
+        "props": {
+          "headers": [
+            "モード",
+            "移行キー",
+            "役割"
+          ],
+          "rows": [
+            [
+              "Normal",
+              "Esc（デフォルト）",
+              "移動・編集コマンド"
+            ],
+            [
+              "Insert",
+              "i / a / o など",
+              "テキスト入力"
+            ],
+            [
+              "Visual",
+              "v / V / Ctrl+v",
+              "テキスト選択"
+            ]
+          ],
+          "fontSize": 0.95
+        }
+      }
+    ]
+  },
+  {
+    "id": "slide-s1-demo",
+    "layout": "statement",
+    "props": {
+      "children": "Demo\n（Vim の見た目）"
+    }
+  },
+  {
+    "id": "slide-s2",
+    "layout": "section",
+    "props": {
+      "title": "Vim の魅力"
+    }
+  },
+  {
+    "id": "slide-s2-keyboard",
+    "layout": "content",
+    "props": {
+      "heading": "マウスに手を伸ばす時間がゼロになる"
+    },
+    "children": [
+      {
+        "id": "c-kb-cols",
         "type": "cols",
-        "props": { "left": 1, "right": 1, "gap": 32 },
+        "props": {
+          "left": 1,
+          "right": 1,
+          "gap": 32
+        },
         "columns": [
           [
-            { "id": "c-motion-l-h3", "type": "h3", "children": "文字・単語単位" },
             {
-              "id": "c-motion-l-ul",
-              "type": "ul",
-              "items": [
-                "<code>h j k l</code> — 左下上右",
-                "<code>w / b</code> — 単語の先頭へ前進 / 後退",
-                "<code>e</code> — 単語の末尾へ",
-                "<code>f{c}</code> — 行内の文字 <code>c</code> へジャンプ"
-              ]
+              "id": "c-kb-h3-basic",
+              "type": "h3",
+              "children": "基本移動"
+            },
+            {
+              "id": "c-kb-table-basic",
+              "type": "table",
+              "props": {
+                "headers": [
+                  "キー",
+                  "移動方向"
+                ],
+                "rows": [
+                  [
+                    "h",
+                    "← 左"
+                  ],
+                  [
+                    "j",
+                    "↓ 下"
+                  ],
+                  [
+                    "k",
+                    "↑ 上"
+                  ],
+                  [
+                    "l",
+                    "→ 右"
+                  ]
+                ],
+                "fontSize": 1
+              }
             }
           ],
           [
-            { "id": "c-motion-r-h3", "type": "h3", "children": "行・ファイル単位" },
             {
-              "id": "c-motion-r-ul",
-              "type": "ul",
-              "items": [
-                "<code>0 / $</code> — 行頭 / 行末",
-                "<code>gg / G</code> — ファイル先頭 / 末尾",
-                "<code>{n}G</code> — n行目へ",
-                "<code>Ctrl-d / Ctrl-u</code> — 半画面スクロール"
-              ]
+              "id": "c-kb-h3-jump",
+              "type": "h3",
+              "children": "ジャンプ"
+            },
+            {
+              "id": "c-kb-table-jump",
+              "type": "table",
+              "props": {
+                "headers": [
+                  "キー",
+                  "移動先"
+                ],
+                "rows": [
+                  [
+                    "w / b",
+                    "次 / 前の単語"
+                  ],
+                  [
+                    "gg / G",
+                    "ファイル先頭 / 末尾"
+                  ],
+                  [
+                    "0 / $",
+                    "行頭 / 行末"
+                  ]
+                ],
+                "fontSize": 1
+              }
             }
           ]
         ]
       },
       {
-        "id": "c-motion-box",
+        "id": "c-kb-box",
         "type": "box",
-        "props": { "variant": "blue", "label": "定義" },
-        "children": "<strong>モーション</strong>とは「カーソルを動かす操作」のこと。<code>d</code>（削除）などのオペレータと組み合わせて強力なコマンドになる。"
+        "props": {
+          "variant": "green",
+          "label": "ポイント"
+        },
+        "children": "ホームポジションから手を動かさずに、すべての操作が完結する"
       }
     ]
   },
   {
-    "id": "slide-s2-operator",
+    "id": "slide-s2-speed",
+    "layout": "statement",
+    "props": {
+      "children": "起動 0.1 秒\n大きなファイルもサクサク"
+    }
+  },
+  {
+    "id": "slide-s2-custom",
     "layout": "content",
-    "props": { "heading": "オペレータ × モーション = 無限の表現力" },
+    "props": {
+      "heading": "カスタマイズ性"
+    },
     "children": [
       {
-        "id": "c-op-text",
-        "type": "text",
-        "children": "Vim のコマンドは <strong>operator + motion</strong> の文法で成り立っています。"
+        "id": "c-custom-ul",
+        "type": "ul",
+        "items": [
+          "キーバインド・見た目・機能 ― すべて自分好みに変更できる",
+          "設定ファイルはコードなので、Git で管理・共有できる",
+          "<strong>AI に頼めば</strong>、自然言語だけでカスタマイズできる"
+        ]
       },
       {
-        "id": "c-op-table",
-        "type": "table",
+        "id": "c-custom-img",
+        "type": "image",
         "props": {
-          "headers": ["コマンド", "意味"],
-          "rows": [
-            ["<code>dw</code>", "次の単語を削除"],
-            ["<code>d$</code>", "カーソル位置から行末まで削除"],
-            ["<code>ciw</code>", "単語全体を変更（c = change）"],
-            ["<code>y3j</code>", "3行下までヤンク（コピー）"],
-            ["<code>></code>G", "現在行からファイル末尾までインデント"]
-          ],
-          "fontSize": 0.95
+          "src": "pasted-2026-05-04T07-08-57.jpg",
+          "caption": "Claude Code で Neovim をカスタマイズ",
+          "width": 820
         }
-      },
-      {
-        "id": "c-op-box",
-        "type": "box",
-        "props": { "variant": "amber", "label": "例" },
-        "children": "<code>d</code>（削除）・<code>y</code>（ヤンク）・<code>c</code>（変更）・<code>></code>/<code><</code>（インデント）はすべて同じモーションで動く。"
       }
     ]
   },
   {
     "id": "slide-s3",
     "layout": "section",
-    "props": { "title": "テキストオブジェクト" }
+    "props": {
+      "title": "学習コストの話"
+    }
   },
   {
-    "id": "slide-s3-textobj",
+    "id": "slide-s3-honest",
+    "layout": "statement",
+    "props": {
+      "children": "正直、最初は難しい"
+    }
+  },
+  {
+    "id": "slide-s3-steps",
     "layout": "content",
-    "props": { "heading": "構造を意識した編集" },
+    "props": {
+      "heading": "でも、段階的に慣れられる"
+    },
     "children": [
       {
-        "id": "c-to-text",
-        "type": "text",
-        "children": "テキストオブジェクトは「単語」「文」「括弧の中身」などを意味的な単位として扱います。"
+        "id": "c-steps-ul",
+        "type": "ul",
+        "items": [
+          "<strong>1 週間</strong> — 基本操作でコーディングができるようになる",
+          "<strong>1 ヶ月</strong> — VSCode と並用しながら実用レベルに",
+          "<strong>半年</strong> — ストレスなく使いこなせる"
+        ],
+        "props": {
+          "fontSize": 1.1
+        }
       },
       {
-        "id": "c-to-cols",
-        "type": "cols",
-        "props": { "left": 1, "right": 1, "gap": 32 },
-        "columns": [
-          [
-            { "id": "c-to-l-h3", "type": "h3", "children": "<code>i</code> (inner)" },
-            {
-              "id": "c-to-l-ul",
-              "type": "ul",
-              "items": [
-                "<code>ciw</code> — 単語の中身を変更",
-                "<code>ci(</code> — <code>()</code> の中身を変更",
-                "<code>ci\"</code> — <code>\"\"</code> の中身を変更",
-                "<code>cit</code> — HTMLタグの中身を変更"
-              ]
-            }
-          ],
-          [
-            { "id": "c-to-r-h3", "type": "h3", "children": "<code>a</code> (around)" },
-            {
-              "id": "c-to-r-ul",
-              "type": "ul",
-              "items": [
-                "<code>daw</code> — 単語と前後の空白を削除",
-                "<code>da(</code> — <code>()</code> ごと削除",
-                "<code>da\"</code> — <code>\"\"</code> ごと削除",
-                "<code>dat</code> — HTMLタグごと削除"
-              ]
-            }
-          ]
+        "id": "c-steps-box",
+        "type": "box",
+        "props": {
+          "variant": "amber",
+          "label": "おすすめ"
+        },
+        "children": "最初から全力投球しなくていい。<strong>VSCode と並行して</strong>少しずつ慣れていくのが続けやすい"
+      }
+    ]
+  },
+  {
+    "id": "slide-s3-ai",
+    "layout": "content",
+    "props": {
+      "heading": "AI 時代、カスタマイズのハードルは下がった"
+    },
+    "children": [
+      {
+        "type": "vcenter",
+        "id": "c-moqtkg1f-a9ex",
+        "children": [
+          {
+            "id": "c-ai-l-h3",
+            "type": "h3",
+            "children": "従来"
+          },
+          {
+            "id": "c-ai-l-ul",
+            "type": "ul",
+            "items": [
+              "Lua / Vimscript の記法を覚える必要があった",
+              "プラグイン構造の理解も必要だった"
+            ]
+          },
+          {
+            "type": "divider",
+            "id": "c-moqtkzj8-56ck"
+          },
+          {
+            "id": "c-ai-r-h3",
+            "type": "h3",
+            "children": "今"
+          },
+          {
+            "id": "c-ai-r-ul",
+            "type": "ul",
+            "items": [
+              "やりたいことを AI に伝えるだけ",
+              "コードは AI が生成・修正してくれる"
+            ]
+          }
         ]
       }
     ]
@@ -188,97 +356,195 @@
   {
     "id": "slide-s4",
     "layout": "section",
-    "props": { "title": "マクロと繰り返し" }
+    "props": {
+      "title": "How to Start"
+    }
   },
   {
-    "id": "slide-s4-macro",
+    "id": "slide-s4-vscode",
     "layout": "content",
-    "props": { "heading": "同じ操作を一瞬で繰り返す" },
+    "props": {
+      "heading": "Step 1 — まず VSCode で体験する"
+    },
     "children": [
       {
-        "id": "c-macro-cols",
-        "type": "cols",
-        "props": { "left": 1, "right": 1, "gap": 32 },
-        "columns": [
-          [
-            { "id": "c-macro-l-h3", "type": "h3", "children": "ドットコマンド <code>.</code>" },
-            {
-              "id": "c-macro-l-ul",
-              "type": "ul",
-              "items": [
-                "直前の変更操作を再実行",
-                "例: <code>ciw\"word\"</code> → <code>.</code> で繰り返し",
-                "シンプルな繰り返しに最適"
-              ]
-            }
-          ],
-          [
-            { "id": "c-macro-r-h3", "type": "h3", "children": "マクロ <code>q{reg}</code>" },
-            {
-              "id": "c-macro-r-ul",
-              "type": "ul",
-              "items": [
-                "<code>qa</code> — レジスタ <code>a</code> に記録開始",
-                "操作を実行",
-                "<code>q</code> — 記録終了",
-                "<code>@a</code> — 再生 / <code>100@a</code> で100回"
-              ]
-            }
-          ]
+        "id": "c-vscode-img",
+        "type": "image",
+        "props": {
+          "src": "pasted-2026-05-04T07-11-22.jpg",
+          "caption": "VSCode Vim プラグインの一例",
+          "width": 800
+        }
+      },
+      {
+        "id": "c-vscode-box",
+        "type": "box",
+        "props": {
+          "variant": "green",
+          "label": "ポイント"
+        },
+        "children": "使い慣れた VSCode 環境のまま、Vim のキーバインドだけ体験できる"
+      }
+    ]
+  },
+  {
+    "id": "slide-s4-neovim",
+    "layout": "content",
+    "props": {
+      "heading": "Step 2 — Neovim をインストールする"
+    },
+    "children": [
+      {
+        "id": "c-nvim-ul",
+        "type": "ul",
+        "items": [
+          "Mac: <code>brew install neovim</code>",
+          "Windows: <code>winget install Neovim.Neovim</code>",
+          "Linux: 略（公式サイトへ）",
+          "設定ファイル: <code>~/.config/nvim/init.lua</code>"
         ]
       },
       {
-        "id": "c-macro-box",
+        "id": "c-nvim-box",
         "type": "box",
-        "props": { "variant": "violet", "label": "定理" },
-        "children": "マクロは「編集操作のプログラム」。複雑な繰り返し変換でも、記録→再生で自動化できる。"
+        "props": {
+          "variant": "red",
+          "label": "注意"
+        },
+        "children": "素の Neovim はシンプルすぎる。<strong>プラグイン設定は必須</strong>と思っておこう"
       }
     ]
   },
   {
     "id": "slide-s5",
     "layout": "section",
-    "props": { "title": "その他の強み" }
+    "props": {
+      "title": "プラグインの設定"
+    }
   },
   {
-    "id": "slide-s5-misc",
+    "id": "slide-s5-plugins",
     "layout": "content",
-    "props": { "heading": "Vim が選ばれる理由" },
+    "props": {
+      "heading": "プラグインで IDE に変わる"
+    },
     "children": [
       {
-        "id": "c-misc-ul",
-        "type": "ul",
-        "items": [
-          "<strong>どこでも使える</strong> — SSH先のサーバー、コンテナ内、古いUNIX環境でも標準インストール済み",
-          "<strong>超高速起動</strong> — 重いIDEと違い、ファイルを即座に開ける",
-          "<strong>高い拡張性</strong> — Neovim + LSP でモダンなIDE機能も実現",
-          "<strong>キーボード完結</strong> — マウス不要でフロー状態を維持しやすい",
-          "<strong>学習資産の永続性</strong> — 習得した操作は30年後も通用する"
+        "type": "cols",
+        "id": "c-moqv5lrv-0mc3",
+        "props": {
+          "left": 1,
+          "right": 1
+        },
+        "columns": [
+          [
+            {
+              "id": "c-plugins-ul",
+              "type": "ul",
+              "items": [
+                "<strong>nvim-lspconfig</strong> — コード補完・エラー表示",
+                "<strong>telescope.nvim</strong> — ファイル・文字列の高速検索"
+              ],
+              "props": {
+                "fontSize": 0.9
+              }
+            }
+          ],
+          [
+            {
+              "type": "ul",
+              "id": "c-moqv7xo1-nczn",
+              "items": [
+                "<strong>nvim-treesitter</strong> — シンタックスハイライト強化",
+                "<strong>vim-fugitive</strong> — Neovim 内で Git 操作"
+              ],
+              "props": {
+                "fontSize": 0.9
+              }
+            }
+          ]
         ]
       },
       {
-        "id": "c-misc-box",
-        "type": "box",
-        "props": { "variant": "red", "label": "注意" },
-        "children": "学習コストは高いが、習熟すれば<strong>エディタを意識しない</strong>レベルに到達できる。<code>vimtutor</code> で30分の練習から始めよう。"
+        "id": "c-plugins-img",
+        "type": "image",
+        "props": {
+          "src": "pasted-2026-05-04T07-13-08.jpg",
+          "caption": "telescope.nvim のプラグイン使用例",
+          "borderColor": "blue",
+          "width": 760
+        }
       }
     ]
   },
   {
-    "id": "slide-summary",
+    "id": "slide-s5-distro",
     "layout": "content",
-    "props": { "heading": "まとめ" },
+    "props": {
+      "heading": "迷ったらディストリビューションから始める"
+    },
     "children": [
       {
-        "id": "c-summary-box",
-        "type": "box",
-        "props": { "variant": "green", "label": "まとめ" },
-        "children": "・<strong>モーダル編集</strong>で「入力」と「操作」を分離し、ホームポジションから離れない\n・<strong>operator + motion</strong> の文法で編集を簡潔に表現できる\n・<strong>テキストオブジェクト</strong>で構造を意識した直感的な編集が可能\n・<strong>マクロ</strong>で複雑な繰り返しも一瞬で自動化\n・どこでも動き、学習資産が永続する信頼のエディタ"
+        "id": "c-distro-ul",
+        "type": "ul",
+        "items": [
+          "<strong>LazyVim</strong> — 人気 No.1。モダンな設定が最初から揃っている",
+          "<strong>AstroNvim</strong> — VSCode ライクな UI で初心者にも馴染みやすい"
+        ],
+        "props": {
+          "fontSize": 0.98
+        }
       },
       {
-        "id": "c-summary-text",
-        "type": "text",
-        "children": "まずは <code>vimtutor</code> を実行してみましょう。"
+        "id": "c-distro-img",
+        "type": "image",
+        "props": {
+          "src": "pasted-2026-05-04T07-18-30.jpg",
+          "caption": "AstroNvim の デモ。主要な機能が一通り揃っている。",
+          "width": 640
+        }
+      }
+    ],
+    "overlays": [
+      {
+        "type": "abs-textbox",
+        "id": "c-moqvddna-cx70",
+        "props": {
+          "x": 990.9126077865665,
+          "y": 642.8999600865534,
+          "content": "参照：https://astronvim.com/",
+          "borderColor": "gray",
+          "fontSize": 0.5,
+          "fitToInner": true
+        }
+      }
+    ]
+  },
+  {
+    "id": "slide-s5-demo",
+    "layout": "statement",
+    "props": {
+      "children": "Demo\n（Neovim の実際の操作とプラグイン）"
+    }
+  },
+  {
+    "id": "slide-summary",
+    "layout": "content",
+    "props": {
+      "heading": "まとめ"
+    },
+    "children": [
+      {
+        "id": "c-summary-ul",
+        "type": "ul",
+        "items": [
+          "Vim は「キーボードだけで操作する高機能エディタ」",
+          "学習コストはあるが、段階的に・AI を活用すれば怖くない",
+          "まずは <strong>VSCode の Vim プラグイン</strong>から始めてみよう"
+        ],
+        "props": {
+          "fontSize": 1.1
+        }
       }
     ]
   }

@@ -10,13 +10,14 @@ interface Props {
   slideIndex: number
   sectionNumbers: Map<string, SectionInfo>
   tocEntries: TocEntry[]
+  lang?: string
   selectedComponentId: string | null
   onSelectComponent: (id: string) => void
   onMoveOverlay: (id: string, x: number, y: number) => void
   onNavigate: (delta: number) => void
 }
 
-export function SlidePreview({ slide, slides, slideIndex, sectionNumbers, tocEntries, selectedComponentId, onSelectComponent, onMoveOverlay, onNavigate }: Props) {
+export function SlidePreview({ slide, slides, slideIndex, sectionNumbers, tocEntries, lang, selectedComponentId, onSelectComponent, onMoveOverlay, onNavigate }: Props) {
   const containerRef = useRef<HTMLDivElement>(null)
   const [scale, setScale] = useState(1)
 
@@ -59,6 +60,7 @@ export function SlidePreview({ slide, slides, slideIndex, sectionNumbers, tocEnt
                 pageNum={slideIndex + 1}
                 sectionNumbers={sectionNumbers}
                 tocEntries={tocEntries}
+                lang={lang}
                 selectedComponentId={selectedComponentId ?? undefined}
                 onSelectComponent={onSelectComponent}
               />

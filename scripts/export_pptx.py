@@ -1,7 +1,7 @@
 #!/usr/bin/env -S uv run
 # /// script
 # requires-python = ">=3.11"
-# dependencies = ["requests", "pdf2image", "python-pptx"]
+# dependencies = ["requests", "pdf2image", "python-pptx", "pyyaml"]
 # ///
 """
 Export slides to PPTX via the dev server API.
@@ -14,6 +14,7 @@ Usage:
 
 import sys
 import os
+import json
 import argparse
 from pathlib import Path
 
@@ -33,7 +34,32 @@ def fetch_pdf(project: str, port: int) -> bytes:
     return resp.content
 
 
-def pdf_to_pptx(pdf_bytes: bytes, output_path: Path, dpi: int):
+def load_notes(project: str) -> list[str]:
+    """Return per-slide note texts in slide order. Empty string if no note."""
+    project_dir = ROOT / "projects" / project
+
+    slides_path = project_dir / "slides.json"
+    if not slides_path.exists():
+        return []
+    with open(slides_path, encoding="utf-8") as f:
+        slides = json.load(f)
+    slide_ids = [s.get("id", "") for s in slides]
+
+    script_path = project_dir / "script.yaml"
+    if not script_path.exists():
+        return [""] * len(slide_ids)
+
+    import yaml
+    with open(script_path, encoding="utf-8") as f:
+        script: dict = yaml.safe_load(f) or {}
+
+    notes = [script.get(sid, "").strip() for sid in slide_ids]
+    filled = sum(1 for n in notes if n)
+    print(f"  Script notes: {filled}/{len(notes)} slides have notes")
+    return notes
+
+
+def pdf_to_pptx(pdf_bytes: bytes, output_path: Path, dpi: int, notes: list[str]):
     from pdf2image import convert_from_bytes
     from pptx import Presentation
     from pptx.util import Inches
@@ -58,6 +84,8 @@ def pdf_to_pptx(pdf_bytes: bytes, output_path: Path, dpi: int):
             page.save(img_path, "PNG")
             slide = prs.slides.add_slide(blank_layout)
             slide.shapes.add_picture(img_path, 0, 0, slide_w, slide_h)
+            if i < len(notes) and notes[i]:
+                slide.notes_slide.notes_text_frame.text = notes[i]
             print(f"  [{i+1}/{len(pages)}] added", end="\r")
 
     prs.save(str(output_path))
@@ -79,8 +107,10 @@ def main():
     pdf_path.write_bytes(pdf_bytes)
     print(f"  PDF saved: {pdf_path}")
 
+    notes = load_notes(args.project)
+
     pptx_path = OUTPUT_DIR / f"{args.project}.pptx"
-    pdf_to_pptx(pdf_bytes, pptx_path, args.dpi)
+    pdf_to_pptx(pdf_bytes, pptx_path, args.dpi, notes)
 
 
 if __name__ == "__main__":

@@ -1,8 +1,15 @@
 #!/bin/bash
 MODE=$1
 PROJECT=$2
-HOST="aldebaran"
-REMOTE_BASE="~/.images_for_ai_slide"
+
+CONFIG_FILE="$(dirname "$0")/../.sync_config"
+if [ ! -f "$CONFIG_FILE" ]; then
+  echo "Error: .sync_config not found. Copy .sync_config.sample and edit it:"
+  echo "  cp .sync_config.sample .sync_config"
+  exit 1
+fi
+# shellcheck source=../.sync_config
+source "$CONFIG_FILE"
 
 if [ -z "$PROJECT" ]; then
   echo "Usage: npm run $MODE-img <project>"

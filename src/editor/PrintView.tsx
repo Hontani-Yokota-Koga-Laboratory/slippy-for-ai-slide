@@ -14,7 +14,14 @@ export function PrintView({ project, theme }: Props) {
   const [slides, setSlides] = useState<Slide[]>([])
   const [sectionNumbers, setSectionNumbers] = useState<Map<string, SectionInfo>>(new Map())
   const [tocEntries, setTocEntries] = useState<TocEntry[]>([])
+  const [lang, setLang] = useState('ja')
   const [ready, setReady] = useState(false)
+
+  useEffect(() => {
+    fetch(`/api/projects/${project}/config`)
+      .then(r => r.json())
+      .then(data => { if (data.lang) setLang(data.lang) })
+  }, [project])
 
   useEffect(() => {
     fetch(`/api/projects/${project}/slides`)
@@ -31,6 +38,7 @@ export function PrintView({ project, theme }: Props) {
 
   return (
     <ProjectContext.Provider value={project}>
+      <link rel="stylesheet" href={`/api/projects/${project}/style.css`} />
       <div id="print-ready" className={`theme-${theme}`}>
         {slides.map((slide, i) => (
           <div key={slide.id} className="print-slide-wrapper">
@@ -39,6 +47,7 @@ export function PrintView({ project, theme }: Props) {
               pageNum={i + 1}
               sectionNumbers={sectionNumbers}
               tocEntries={tocEntries}
+              lang={lang}
             />
           </div>
         ))}

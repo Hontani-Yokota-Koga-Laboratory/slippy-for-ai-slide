@@ -4,3 +4,4 @@ dist/
 projects/*/images/
 output/*
 !output/.gitignore
+.sync_config

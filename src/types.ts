@@ -19,7 +19,7 @@ export interface ColsComponent {
   type: 'cols'
   id: string
   // ratio as two integers, e.g. left:1 right:2 → "1fr 2fr"
-  props: { left: number; right: number; gap?: number }
+  props: { left: number; right: number; gap?: number; rowGap?: number }
   columns: SlideComponent[][]
 }
 
@@ -79,6 +79,13 @@ export interface ImageComponent {
   }
 }
 
+export interface KeyPointsComponent {
+  type: 'key-points'
+  id: string
+  props?: { variant?: BoxVariant; fontSize?: number }
+  items: { label: string; body: string }[]
+}
+
 export type SlideComponent =
   | BoxComponent
   | ColsComponent
@@ -90,6 +97,7 @@ export type SlideComponent =
   | TableComponent
   | DividerComponent
   | VCenterComponent
+  | KeyPointsComponent
 
 // ── Slide types (one slide = one 1280×720 page) ───────────────────────────────
 

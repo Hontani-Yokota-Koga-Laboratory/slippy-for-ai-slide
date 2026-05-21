@@ -2,6 +2,7 @@ import type { Plugin, ViteDevServer } from 'vite'
 import { readFile, writeFile, readdir, mkdir } from 'node:fs/promises'
 import { join, resolve, extname } from 'node:path'
 import type { IncomingMessage, ServerResponse } from 'node:http'
+import yaml from 'js-yaml'
 
 const ROOT = resolve(import.meta.dirname, '..')
 
@@ -97,6 +98,59 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse, server: 
         await writeFile(filePath, body, 'utf-8')
         await updateProjectIndex(project)
         return res.end(JSON.stringify({ ok: true }))
+      }
+    }
+
+    // GET /api/projects/:name/script → read script.yaml as JSON map
+    // PUT /api/projects/:name/script/:slideId → update one slide's notes
+    const scriptMatch = path.match(/^projects\/([^/]+)\/script$/)
+    const scriptSlideMatch = path.match(/^projects\/([^/]+)\/script\/([^/]+)$/)
+
+    if (scriptMatch) {
+      const project = scriptMatch[1]
+      const filePath = join(ROOT, 'projects', project, 'script.yaml')
+      if (req.method === 'GET') {
+        try {
+          const content = await readFile(filePath, 'utf-8')
+          const parsed = (yaml.load(content) ?? {}) as Record<string, string>
+          return res.end(JSON.stringify(parsed))
+        } catch {
+          return res.end(JSON.stringify({}))
+        }
+      }
+    }
+
+    if (scriptSlideMatch) {
+      const project = scriptSlideMatch[1]
+      const slideId = scriptSlideMatch[2]
+      const filePath = join(ROOT, 'projects', project, 'script.yaml')
+      if (req.method === 'PUT') {
+        const body = await readBody(req)
+        const text = body.toString('utf-8')
+        let data: Record<string, string> = {}
+        try {
+          const content = await readFile(filePath, 'utf-8')
+          data = (yaml.load(content) ?? {}) as Record<string, string>
+        } catch { /* new file */ }
+        data[slideId] = text
+        const dumped = yaml.dump(data, { lineWidth: -1 }).replace(/\n([^\s])/g, '\n\n\n$1')
+        await writeFile(filePath, dumped, 'utf-8')
+        return res.end(JSON.stringify({ ok: true }))
+      }
+    }
+
+    // GET /api/projects/:name/style.css → serve custom css
+    const styleMatch = path.match(/^projects\/([^/]+)\/style\.css$/)
+    if (styleMatch && req.method === 'GET') {
+      const project = styleMatch[1]
+      const filePath = join(ROOT, 'projects', project, 'style.css')
+      try {
+        const content = await readFile(filePath, 'utf-8')
+        res.setHeader('Content-Type', 'text/css')
+        return res.end(content)
+      } catch {
+        res.statusCode = 404
+        return res.end('/* No custom style */')
       }
     }
 

@@ -5,6 +5,7 @@ import { SplitPane } from './editor/SplitPane'
 import { SlidePreview } from './editor/SlidePreview'
 import { PropsPanel } from './editor/PropsPanel'
 import { PrintView } from './editor/PrintView'
+import { PresentationView } from './editor/PresentationView'
 import { useAppLogic, getUrlParams } from './hooks/useAppLogic'
 
 const THEMES = [
@@ -21,11 +22,15 @@ const MOBILE_TABS = [
 ]
 
 export default function App() {
-  const { project: initialProject, print: isPrint, theme: initialTheme } = getUrlParams()
+  const { project: initialProject, print: isPrint, present: isPresent, theme: initialTheme } = getUrlParams()
   const logic = useAppLogic()
 
   if (isPrint) {
     return <PrintView project={initialProject} theme={initialTheme} />
+  }
+
+  if (isPresent) {
+    return <PresentationView project={initialProject} theme={initialTheme} />
   }
 
   const selectedSlideIndex = logic.slides.findIndex(s => s.id === logic.selectedSlideId)
@@ -62,6 +67,7 @@ export default function App() {
       slideIndex={selectedSlideIndex >= 0 ? selectedSlideIndex : 0}
       sectionNumbers={logic.sectionNumbers}
       tocEntries={logic.tocEntries}
+      lang={logic.lang}
       selectedComponentId={logic.selectedComponentId}
       onSelectComponent={(id) => logic.selectedSlideId && logic.handleSelectComponent(logic.selectedSlideId, id)}
       onMoveOverlay={logic.handleMoveOverlay}
@@ -79,6 +85,7 @@ export default function App() {
 
   return (
     <ProjectContext.Provider value={logic.project}>
+    <link rel="stylesheet" href={`/api/projects/${logic.project}/style.css`} />
     <div className={`h-screen flex flex-col bg-gray-900 text-white theme-${logic.theme}`}>
       {/* Header */}
       <header className="flex items-center gap-2 px-3 md:px-4 py-2 bg-gray-800 border-b border-gray-700 shrink-0">
@@ -120,11 +127,33 @@ export default function App() {
         </select>
 
         <button
+          onClick={logic.undo}
+          disabled={!logic.canUndo}
+          title="元に戻す (Ctrl+Z)"
+          className="text-sm px-2 py-1 bg-gray-700 hover:bg-gray-600 rounded disabled:opacity-30 transition-colors"
+        >↩</button>
+        <button
+          onClick={logic.redo}
+          disabled={!logic.canRedo}
+          title="やり直す (Ctrl+Y)"
+          className="text-sm px-2 py-1 bg-gray-700 hover:bg-gray-600 rounded disabled:opacity-30 transition-colors"
+        >↪</button>
+        <button
           onClick={logic.save}
           disabled={logic.saving}
           className="text-sm px-2 sm:px-3 py-1 bg-blue-600 hover:bg-blue-500 rounded disabled:opacity-50 transition-colors"
         >
           {logic.saving ? '…' : '保存'}
+        </button>
+        <button
+          onClick={() => {
+            const p = new URLSearchParams(location.search)
+            p.set('present', '1')
+            location.href = `?${p.toString()}`
+          }}
+          className="hidden sm:block text-sm px-3 py-1 bg-emerald-700 hover:bg-emerald-600 rounded transition-colors"
+        >
+          発表
         </button>
         <button
           onClick={logic.generatePdf}

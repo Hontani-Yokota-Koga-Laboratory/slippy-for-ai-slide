@@ -29,8 +29,9 @@ Edit only the lines you identified above. Do not rewrite surrounding slides.
 
 ### After editing `slides.json`
 
-- **Automatic**: `npm run dev` watches for changes and updates `_index.json` automatically.
-- **Manual fallback**: run `node scripts/update_indices.cjs` if the dev server is not running.
+- **`_index.json` is auto-generated — never edit it manually.**
+- `npm run dev` watches `slides.json` and rebuilds `_index.json` automatically on every save.
+- **Manual fallback** (dev server not running): `node scripts/update_indices.cjs`
 
 ## Core Workflows
 

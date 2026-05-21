@@ -112,6 +112,10 @@ export function insertAtTarget(components: SlideComponent[], target: MoveTarget,
       return { ...c, children: [...c.children, comp] }
     if (target.kind === 'cols' && c.id === target.id && c.type === 'cols')
       return { ...c, columns: c.columns.map((col, i) => i === target.colIndex ? [...col, comp] : col) }
+    if (c.type === 'cols')
+      return { ...c, columns: c.columns.map(col => insertAtTarget(col, target, comp)) }
+    if (c.type === 'vcenter')
+      return { ...c, children: insertAtTarget(c.children, target, comp) }
     return c
   })
 }

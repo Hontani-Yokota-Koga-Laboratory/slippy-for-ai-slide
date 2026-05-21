@@ -52,7 +52,15 @@ export function ComponentTree(props: Props) {
 
   const children = slide?.layout === 'content' ? slide.children : []
   const isContentSlide = slide?.layout === 'content'
-  const draggingComp = draggingId ? children.find(c => c.id === draggingId) ?? null : null
+  const findInTree = (comps: typeof children, id: string): (typeof children)[number] | null => {
+    for (const c of comps) {
+      if (c.id === id) return c
+      if (c.type === 'vcenter') { const f = findInTree(c.children, id); if (f) return f }
+      if (c.type === 'cols') { for (const col of c.columns) { const f = findInTree(col, id); if (f) return f } }
+    }
+    return null
+  }
+  const draggingComp = draggingId ? findInTree(children, draggingId) : null
 
   const sharedNodeProps = {
     selectedId: selectedComponentId,

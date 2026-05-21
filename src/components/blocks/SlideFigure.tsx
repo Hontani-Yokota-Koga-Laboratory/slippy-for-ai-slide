@@ -2,6 +2,7 @@ import type { FigureComponent } from '../../types'
 import { chartRegistry } from '../../charts/registry'
 import { localChartRegistry } from '../../charts/localRegistry'
 import { useProject } from '../../context/ProjectContext'
+import { MathText } from '../MathText'
 
 interface Props {
   block: FigureComponent
@@ -27,7 +28,7 @@ export function SlideFigure({ block, selected, onClick }: Props) {
           Chart not found: {block.props.chartId}
         </div>
       )}
-      {caption && <span className="slide-figure-caption">{caption}</span>}
+      {caption && <MathText className="slide-figure-caption">{caption}</MathText>}
     </div>
   )
 }

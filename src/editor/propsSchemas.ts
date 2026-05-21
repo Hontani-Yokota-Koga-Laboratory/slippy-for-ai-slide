@@ -26,9 +26,10 @@ export const COMPONENT_SCHEMAS: Record<string, PropField[]> = {
     { key: 'width',         label: '幅 (px)',          type: 'number', min: 100, step: 10 },
   ],
   cols: [
-    { key: 'left',  label: '左の比率', type: 'number', min: 1, max: 9, step: 1 },
-    { key: 'right', label: '右の比率', type: 'number', min: 1, max: 9, step: 1 },
-    { key: 'gap',   label: 'Gap (px)', type: 'number', min: 0, step: 4, placeholder: '24' },
+    { key: 'left',   label: '左の比率',       type: 'number', min: 1, max: 9, step: 1 },
+    { key: 'right',  label: '右の比率',       type: 'number', min: 1, max: 9, step: 1 },
+    { key: 'gap',    label: '列間 Gap (px)',  type: 'number', min: 0, step: 4, placeholder: '24' },
+    { key: 'rowGap', label: '行間 Gap (px)',  type: 'number', min: 0, step: 2, placeholder: '14' },
   ],
   figure: [
     { key: 'caption', label: 'キャプション', type: 'text' },
